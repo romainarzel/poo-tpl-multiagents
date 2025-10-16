@@ -14,17 +14,11 @@ public class TestGravityBall {
 
 class GravityBall extends Point implements Simulable{
     private GUISimulator gui;
-
     private Color ballColor;
-
     private int ballRadius;
-
     private double ballBounce;
-
     private int xVelocity;
-
     private int yVelocity;
-
     private int gravityStrength;
 
     public GravityBall(GUISimulator gui, Color ballColor, int ballRadius, double ballBounce, int gravityStrength){
