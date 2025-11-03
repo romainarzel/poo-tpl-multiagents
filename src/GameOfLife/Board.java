@@ -6,7 +6,6 @@ import java.util.HashSet;
 
 public class Board {
     private ArrayList<ArrayList<Cell>> cellBoard;
-    private ArrayList<ArrayList<Integer>> changeBoard;
     private final int width;
     private final int height;
 
@@ -26,18 +25,14 @@ public class Board {
 
     public void initBoard(HashSet<Point2D.Double> aliveCells){
         setCellBoard(aliveCells);
-        initNbAliveNeighbours();
-        initChangeBoard();
     }
 
     public void initBoard(){
         setCellBoard();
-        initNbAliveNeighbours();
-        initChangeBoard();
     }
 
     public boolean getState(int lig, int col){
-        return cellBoard.get(lig).get(col).getState();
+        return cellBoard.get(lig).get(col).isAlive();
     }
 
     public int getWidth(){
@@ -48,7 +43,7 @@ public class Board {
         return height;
     }
 
-    public void setCellBoard(){
+    private void setCellBoard(){
         cellBoard = new ArrayList<>();
 
         for (int lig = 0; lig < height; lig++){
@@ -60,7 +55,20 @@ public class Board {
         }
     }
 
-    public void setCellBoard(HashSet<Point2D.Double> aliveCells){
+    private ArrayList<ArrayList<Integer>> setIntBoard(){
+        ArrayList<ArrayList<Integer>> intBoard = new ArrayList<>();
+
+        for (int i = 0; i < height; i++){
+            intBoard.add(new ArrayList<>());
+            for (int j = 0; j < width; j++){
+                intBoard.get(i).add(0);
+            }
+        }
+
+        return intBoard;
+    }
+
+    private void setCellBoard(HashSet<Point2D.Double> aliveCells){
         cellBoard = new ArrayList<>();
         Point2D coords = new Point2D.Double();
 
@@ -78,67 +86,32 @@ public class Board {
         }
     }
 
-    private void initChangeBoard(){
-        changeBoard = new ArrayList<>();
-
-        for (int lig = 0; lig < height; lig++){
-            changeBoard.add(new ArrayList<>());
-
-            for (int col = 0; col < width; col++){
-                changeBoard.get(lig).add(0);
-            }
-        }
-    }
-
-    public void initNbAliveNeighbours(){
-        for (int lig = 0; lig < width; lig++){
-            for (int col = 0; col < height; col++){
-                initNbAliveNeighboursLocal(lig, col);
-            }
-        }
-    }
-
-    private void initNbAliveNeighboursLocal(int lig, int col){
-        Point2D.Double centerCell = new Point2D.Double(lig, col);
-        Point2D.Double adjCell = new Point2D.Double();
+    private int getNbAliveNeighbours(int lig, int col){
         int count = 0;
+        boolean isCellAlive;
+
+        Point2D.Double adjCell = new Point2D.Double();
 
         for (int addLig = -1; addLig <= 1; addLig++){
-
             for (int addCol = -1; addCol <= 1; addCol++){
-                adjCell.setLocation(centerCell.getX() + addCol, centerCell.getY() + addLig);
+                adjCell.setLocation(col + addCol, lig + addLig);
                 adjCell = inBounds(adjCell);
 
-                if (!adjCell.equals(centerCell) & cellBoard.get((int) adjCell.getY()).get((int) adjCell.getX()).getState()){
+                isCellAlive = cellBoard.get((int)adjCell.getY()).get((int)adjCell.getX()).isAlive();
+
+                if ((addLig != 0 | addCol != 0) & isCellAlive){
                     count++;
                 }
             }
         }
 
-        cellBoard.get(lig).get(col).changeNeighbours(count);
-    }
-
-    public void addToChangeBoard(int lig, int col, int change){
-        Point2D.Double adjCell = new Point2D.Double();
-
-        for (int addLig = -1; addLig <= 1; addLig++){
-
-            for (int addCol = -1; addCol <= 1; addCol++){
-                adjCell.setLocation(col + addCol, lig + addLig);
-                adjCell = inBounds(adjCell);
-
-                if (!(addLig == 0 & addCol == 0)){
-                    changeBoard.get((int)adjCell.getY()).set((int)adjCell.getX(), changeBoard.get((int)adjCell.getY()).get((int)adjCell.getX()) + change);
-                }
-            }
-        }
-
-
+        return count;
     }
 
     private Point2D.Double inBounds(Point2D.Double p){
         double x = p.getX();
         double y = p.getY();
+
         if (x < 0){
             x = width - 1;
         } else if (x >= width){
@@ -155,34 +128,16 @@ public class Board {
     }
 
     public void nextGen(){
-        initChangeBoard();
-
+        ArrayList<ArrayList<Integer>> listNeighbours = setIntBoard();
         for (int lig = 0; lig < width; lig++){
-
             for (int col = 0; col < height; col++){
-                int change = cellBoard.get(col).get(lig).newGen();
-                switch (change){
-                    case -1:
-                        addToChangeBoard(lig, col, -1);
-                        break;
-
-                    case 1:
-                        addToChangeBoard(lig, col, 1);
-                        break;
-
-                    default :
-                        break;
-                }
+                listNeighbours.get(lig).set(col, getNbAliveNeighbours(lig, col));
             }
-
         }
-        applyChangeBoard();
-    }
 
-    private void applyChangeBoard(){
         for (int lig = 0; lig < width; lig++){
             for (int col = 0; col < height; col++){
-                cellBoard.get(lig).get(col).changeNeighbours(changeBoard.get(lig).get(col));
+                cellBoard.get(lig).get(col).newGen(listNeighbours.get(lig).get(col));
             }
         }
     }

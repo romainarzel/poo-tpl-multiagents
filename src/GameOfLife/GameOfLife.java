@@ -10,11 +10,17 @@ public class GameOfLife {
         GUISimulator gui = new GUISimulator(600, 600, Color.BLACK);
 
         HashSet<Point2D.Double> aliveCells = new HashSet<>();
-        aliveCells.add(new Point2D.Double(12, 10));
-        aliveCells.add(new Point2D.Double(10, 11));
-        aliveCells.add(new Point2D.Double(12, 11));
-        aliveCells.add(new Point2D.Double(11, 12));
-        aliveCells.add(new Point2D.Double(12, 12));
+        aliveCells.add(new Point2D.Double(1, 0));
+        aliveCells.add(new Point2D.Double(2, 1));
+        aliveCells.add(new Point2D.Double(0, 2));
+        aliveCells.add(new Point2D.Double(1, 2));
+        aliveCells.add(new Point2D.Double(2, 2));
+
+        for (int i = 10; i < 15; i++){
+            for (int j = 10; j < 15; j++){
+                aliveCells.add(new Point2D.Double(i, j));
+            }
+        }
 
         LivingBoard game = new LivingBoard(gui, aliveCells, 10, 50, 50, Color.WHITE, Color.BLACK, Color.LIGHT_GRAY);
     }
@@ -63,11 +69,13 @@ class LivingBoard extends Board implements Simulable{
 
     public void next(){
         nextGen();
+        gui.reset();
         draw();
     }
 
     public void restart(){
         initBoard(starter);
+        gui.reset();
         draw();
     }
 }
