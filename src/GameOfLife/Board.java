@@ -77,6 +77,7 @@ public class Board {
 
             for (int col = 0; col < width; col++){
                 coords.setLocation(lig, col);
+
                 if (aliveCells.contains(coords)){
                     cellBoard.get(lig).add(new Cell(true));
                 } else {
@@ -95,11 +96,11 @@ public class Board {
         for (int addLig = -1; addLig <= 1; addLig++){
             for (int addCol = -1; addCol <= 1; addCol++){
                 adjCell.setLocation(col + addCol, lig + addLig);
-                adjCell = inBounds(adjCell);
+                inBounds(adjCell); // If the coords are out of bounds wrap them around the other side
 
                 isCellAlive = cellBoard.get((int)adjCell.getY()).get((int)adjCell.getX()).isAlive();
 
-                if ((addLig != 0 | addCol != 0) & isCellAlive){
+                if ((addLig != 0 | addCol != 0) & isCellAlive){ // Warning : need to check if not counting itself
                     count++;
                 }
             }
@@ -108,7 +109,14 @@ public class Board {
         return count;
     }
 
-    private Point2D.Double inBounds(Point2D.Double p){
+    /*
+    * If the given coordinates are out of bounds
+    * => Wrap them around the other side
+    * (if leave to left get to the right if leave the top go to bottom and vice versa)
+    *
+    * It's like a donut but in 2D !!!
+     */
+    private void inBounds(Point2D.Double p){
         double x = p.getX();
         double y = p.getY();
 
@@ -124,18 +132,18 @@ public class Board {
             y = 0;
         }
 
-        return new Point2D.Double(x, y);
+        p.setLocation(x, y);
     }
 
     public void nextGen(){
         ArrayList<ArrayList<Integer>> listNeighbours = setIntBoard();
-        for (int lig = 0; lig < width; lig++){
+        for (int lig = 0; lig < width; lig++){ // Calculate the number of neighbours for each cell
             for (int col = 0; col < height; col++){
                 listNeighbours.get(lig).set(col, getNbAliveNeighbours(lig, col));
             }
         }
 
-        for (int lig = 0; lig < width; lig++){
+        for (int lig = 0; lig < width; lig++){ // Change the state of the cell according to the inner laws of the cell
             for (int col = 0; col < height; col++){
                 cellBoard.get(lig).get(col).newGen(listNeighbours.get(lig).get(col));
             }
