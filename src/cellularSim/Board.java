@@ -1,7 +1,8 @@
-package GameOfLife;
+package cellularSim;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Board {
@@ -13,25 +14,23 @@ public class Board {
         this.width = width;
         this.height = height;
 
-        initBoard();
+        setCellBoard();
+    }
+
+    public Board(int width, int height, HashMap<Point2D.Double, Integer> aliveCells){
+        this.width = width;
+        this.height = height;
+
+        setCellBoard(aliveCells);
     }
 
     public Board(int width, int height, HashSet<Point2D.Double> aliveCells){
         this.width = width;
         this.height = height;
-
-        initBoard(aliveCells);
-    }
-
-    public void initBoard(HashSet<Point2D.Double> aliveCells){
         setCellBoard(aliveCells);
     }
 
-    public void initBoard(){
-        setCellBoard();
-    }
-
-    public boolean getState(int lig, int col){
+    public boolean isAlive(int lig, int col){
         return cellBoard.get(lig).get(col).isAlive();
     }
 
@@ -43,7 +42,7 @@ public class Board {
         return height;
     }
 
-    private void setCellBoard(){
+    public void setCellBoard(){
         cellBoard = new ArrayList<>();
 
         for (int lig = 0; lig < height; lig++){
@@ -51,6 +50,44 @@ public class Board {
 
             for (int col = 0; col < width; col++){
                 cellBoard.get(lig).add(new Cell());
+            }
+        }
+    }
+
+    public void setCellBoard(HashMap<Point2D.Double, Integer> aliveCells){
+        cellBoard = new ArrayList<>();
+        Point2D coords = new Point2D.Double();
+
+        for (int lig = 0; lig < height; lig++){
+            cellBoard.add(new ArrayList<>());
+
+            for (int col = 0; col < width; col++){
+                coords.setLocation(lig, col);
+
+                if (aliveCells.containsKey(coords)){
+                    cellBoard.get(lig).add(new Cell(aliveCells.get(coords)));
+                } else {
+                    cellBoard.get(lig).add(new Cell());
+                }
+            }
+        }
+    }
+
+    public void setCellBoard(HashSet<Point2D.Double> aliveCells){
+        cellBoard = new ArrayList<>();
+        Point2D coords = new Point2D.Double();
+
+        for (int lig = 0; lig < height; lig++){
+            cellBoard.add(new ArrayList<>());
+
+            for (int col = 0; col < width; col++){
+                coords.setLocation(lig, col);
+
+                if (aliveCells.contains(coords)){
+                    cellBoard.get(lig).add(new Cell(1));
+                } else {
+                    cellBoard.get(lig).add(new Cell(0));
+                }
             }
         }
     }
@@ -66,25 +103,6 @@ public class Board {
         }
 
         return intBoard;
-    }
-
-    private void setCellBoard(HashSet<Point2D.Double> aliveCells){
-        cellBoard = new ArrayList<>();
-        Point2D coords = new Point2D.Double();
-
-        for (int lig = 0; lig < height; lig++){
-            cellBoard.add(new ArrayList<>());
-
-            for (int col = 0; col < width; col++){
-                coords.setLocation(lig, col);
-
-                if (aliveCells.contains(coords)){
-                    cellBoard.get(lig).add(new Cell(true));
-                } else {
-                    cellBoard.get(lig).add(new Cell(false));
-                }
-            }
-        }
     }
 
     private int getNbAliveNeighbours(int lig, int col){
@@ -135,7 +153,7 @@ public class Board {
         p.setLocation(x, y);
     }
 
-    public void nextGen(){
+    public void nextGenConway(){
         ArrayList<ArrayList<Integer>> listNeighbours = setIntBoard();
         for (int lig = 0; lig < width; lig++){ // Calculate the number of neighbours for each cell
             for (int col = 0; col < height; col++){
@@ -145,7 +163,7 @@ public class Board {
 
         for (int lig = 0; lig < width; lig++){ // Change the state of the cell according to the inner laws of the cell
             for (int col = 0; col < height; col++){
-                cellBoard.get(lig).get(col).newGen(listNeighbours.get(lig).get(col));
+                cellBoard.get(lig).get(col).newGenConway(listNeighbours.get(lig).get(col));
             }
         }
     }

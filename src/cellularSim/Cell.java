@@ -1,22 +1,18 @@
-package GameOfLife;
+package cellularSim;
 
 public class Cell {
-    private boolean state;
+    private int state;
 
     public Cell(){
-        state = false;
+        state = 0;
     }
 
-    public Cell(boolean state){
+    public Cell(int state){
         this.state = state;
     }
 
     public boolean isAlive(){
-        if (state) { // Weird code to assure security of private component "state"
-            return true;
-        }
-
-        return false;
+        return state != 0;
     }
 
     /*
@@ -26,16 +22,16 @@ public class Cell {
     * 3) If an alive cell has strictly more than 3 neighbours => the cell dies of overpopulation
     * 4) If neither of these conditions is fulfilled then the cell doesn't change
      */
-    public void newGen(int nbAliveNeighbours){
-        if (state & nbAliveNeighbours != 2 & nbAliveNeighbours != 3){
-            state = false;
-        } else if (!state & nbAliveNeighbours == 3){
-            state = true;
+    public void newGenConway(int nbAliveNeighbours){
+        if (isAlive() & nbAliveNeighbours != 2 & nbAliveNeighbours != 3){
+            state = 0;
+        } else if (!isAlive() & nbAliveNeighbours == 3){
+            state = 1;
         }
     }
 
     @Override
     public String toString(){
-        return state ? "1" : "0";
+        return Integer.toString(state);
     }
 }
