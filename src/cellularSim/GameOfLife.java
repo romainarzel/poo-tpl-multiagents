@@ -27,6 +27,6 @@ public class GameOfLife {
             }
         }
 
-        ConwayBoard game = new ConwayBoard(gui, aliveCells, 10, 50, 50, Color.WHITE, Color.BLACK, Color.LIGHT_GRAY);
+        SimBoard game = new SimBoard(gui, aliveCells, 10, 50, 50, Color.WHITE, Color.BLACK, Color.LIGHT_GRAY);
     }
 }

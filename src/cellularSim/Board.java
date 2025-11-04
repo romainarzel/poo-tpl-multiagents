@@ -30,8 +30,8 @@ public class Board {
         setCellBoard(aliveCells);
     }
 
-    public boolean isAlive(int lig, int col){
-        return cellBoard.get(lig).get(col).isAlive();
+    public float getPercent(int lig, int col){
+        return cellBoard.get(lig).get(col).getPercent();
     }
 
     public int getWidth(){
@@ -127,6 +127,28 @@ public class Board {
         return count;
     }
 
+    private int getNbNeighboursNextState(int lig, int col, int state){
+        int count = 0;
+        int cellState;
+
+        Point2D.Double adjCell = new Point2D.Double();
+
+        for (int addLig = -1; addLig <= 1; addLig++){
+            for (int addCol = -1; addCol <= 1; addCol++){
+                adjCell.setLocation(col + addCol, lig + addLig);
+                inBounds(adjCell); // If the coords are out of bounds wrap them around the other side
+
+                cellState = cellBoard.get((int)adjCell.getY()).get((int)adjCell.getX()).getState();
+
+                if ((addLig != 0 | addCol != 0) & cellState == state + 1){ // Warning : need to check if not counting itself
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
     /*
     * If the given coordinates are out of bounds
     * => Wrap them around the other side
@@ -164,6 +186,23 @@ public class Board {
         for (int lig = 0; lig < width; lig++){ // Change the state of the cell according to the inner laws of the cell
             for (int col = 0; col < height; col++){
                 cellBoard.get(lig).get(col).newGenConway(listNeighbours.get(lig).get(col));
+            }
+        }
+    }
+
+    public void nextGenImmigration(){
+        ArrayList<ArrayList<Integer>> listNeighbours = setIntBoard();
+        int state;
+        for (int lig = 0; lig < width; lig++){ // Calculate the number of neighbours for each cell
+            for (int col = 0; col < height; col++){
+                state = cellBoard.get(lig).get(col).getState();
+                listNeighbours.get(lig).set(col, getNbNeighboursNextState(lig, col, state));
+            }
+        }
+
+        for (int lig = 0; lig < width; lig++){ // Change the state of the cell according to the inner laws of the cell
+            for (int col = 0; col < height; col++){
+                cellBoard.get(lig).get(col).newGenImmigration(listNeighbours.get(lig).get(col));
             }
         }
     }

@@ -1,14 +1,34 @@
 package cellularSim;
 
 public class Cell {
+    private final int maxState;
     private int state;
 
     public Cell(){
         state = 0;
+        maxState = 1;
     }
 
     public Cell(int state){
         this.state = state;
+        maxState = 1;
+    }
+
+    public Cell(int state, int maxState){
+        this.maxState = maxState;
+        setState(state);
+    }
+
+    public int getState(){
+        return state;
+    }
+
+    private void setState(int state){
+        this.state = state % maxState;
+    }
+
+    public float getPercent(){
+        return (float) state / maxState;
     }
 
     public boolean isAlive(){
@@ -27,6 +47,12 @@ public class Cell {
             state = 0;
         } else if (!isAlive() & nbAliveNeighbours == 3){
             state = 1;
+        }
+    }
+
+    public void newGenImmigration(int nbNeighboursNextState){
+        if (nbNeighboursNextState > 2){
+            setState(state + 1);
         }
     }
 
