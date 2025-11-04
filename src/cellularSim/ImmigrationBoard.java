@@ -5,23 +5,25 @@ import gui.Simulable;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.util.HashSet;
+import java.util.HashMap;
 
-class ConwayBoard extends Board implements Simulable {
+class ImmigrationBoard extends Board implements Simulable {
     private final GUISimulator gui;
     private final int cellSize;
     private final Color maxStateCellColor;
     private final Color deadCellColor;
     private final Color bgColor;
-    private final HashSet<Point2D.Double> starter;
+    private final HashMap<Point2D.Double, Integer> starter;
+    private final int maxState;
 
-    public ConwayBoard(GUISimulator gui, HashSet<Point2D.Double> starter, int cellSize, int width, int height, Color maxStateCellColor, Color deadCellColor, Color bgColor){
-        super(width, height, starter);
+    public ImmigrationBoard(GUISimulator gui, HashMap<Point2D.Double, Integer> starter, int maxState, int cellSize, int width, int height, Color maxStateCellColor, Color deadCellColor, Color bgColor){
+        super(width, height, starter, maxState);
         this.gui = gui;
         gui.setSimulable(this);
 
         this.cellSize = cellSize;
         this.starter = starter;
+        this.maxState = maxState;
         this.maxStateCellColor = maxStateCellColor;
         this.deadCellColor = deadCellColor;
         this.bgColor = bgColor;
@@ -30,15 +32,17 @@ class ConwayBoard extends Board implements Simulable {
     }
 
     public void draw(){
-        Color cellColor;
-        for (int x = 0; x < getWidth(); x++){
+        gui.reset();
 
-            for (int y = 0; y < getHeight(); y++){
-                cellColor = linearColorGradient(deadCellColor, maxStateCellColor, getPercent(y, x));
+        Color cellColor;
+        for (int col = 0; col < getWidth(); col++){
+
+            for (int lig = 0; lig < getHeight(); lig++){
+                cellColor = linearColorGradient(deadCellColor, maxStateCellColor, getPercent(lig, col));
 
                 gui.addGraphicalElement(new gui.Rectangle(
-                        20 + cellSize * x,
-                        20 + cellSize * y,
+                        20 + cellSize * col,
+                        20 + cellSize * lig,
                         bgColor, cellColor, cellSize));
 
             }
@@ -46,7 +50,7 @@ class ConwayBoard extends Board implements Simulable {
     }
 
     private Color linearColorGradient(Color c1, Color c2, float percent){
-        if (percent > 100 | percent < 0){
+        if (percent > 100 || percent < 0){
             throw new IllegalArgumentException("percentage is out of range");
         }
 
@@ -61,14 +65,12 @@ class ConwayBoard extends Board implements Simulable {
     }
 
     public void next(){
-        nextGenConway();
-        gui.reset();
+        nextGenImmigration();
         draw();
     }
 
     public void restart(){
-        setCellBoard(starter);
-        gui.reset();
+        setCellBoard(starter, maxState);
         draw();
     }
 }

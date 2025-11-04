@@ -1,32 +1,43 @@
 package cellularSim;
 
-import gui.*;
-import java.awt.geom.Point2D;
-import java.util.HashSet;
-import java.awt.Color;
+import gui.GUISimulator;
 
-public class GameOfLife {
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.util.HashMap;
+
+public class GameOfImmigration {
     public static void main(String[] args){
         GUISimulator gui = new GUISimulator(600, 600, Color.BLACK);
 
-        HashSet<Point2D.Double> aliveCells = new HashSet<>();
+        HashMap<Point2D.Double, Integer> aliveCells = new HashMap<>(21);
 
-        // This is a glider, let it fly accros the map
-        // It's like a little nomad :D
-        aliveCells.add(new Point2D.Double(1, 0));
-        aliveCells.add(new Point2D.Double(2, 1));
-        aliveCells.add(new Point2D.Double(0, 2));
-        aliveCells.add(new Point2D.Double(1, 2));
-        aliveCells.add(new Point2D.Double(2, 2));
+        aliveCells.put(new Point2D.Double(10, 10), 3);
+        aliveCells.put(new Point2D.Double(12, 10), 1);
+        aliveCells.put(new Point2D.Double(13, 10), 1);
 
-        // This is a square with 11 eleven generations before being stable
-        // It even settle into 4 colonies :O
-        for (int i = 10; i < 15; i++){
-            for (int j = 10; j < 15; j++){
-                aliveCells.add(new Point2D.Double(i, j));
-            }
-        }
+        aliveCells.put(new Point2D.Double(10, 11), 3);
+        aliveCells.put(new Point2D.Double(11, 11), 1);
+        aliveCells.put(new Point2D.Double(12, 11), 1);
+        aliveCells.put(new Point2D.Double(13, 11), 1);
+        aliveCells.put(new Point2D.Double(14, 11), 2);
 
-        ConwayBoard game = new ConwayBoard(gui, aliveCells, 10, 50, 50, Color.WHITE, Color.BLACK, Color.LIGHT_GRAY);
+        aliveCells.put(new Point2D.Double(10, 12), 1);
+        aliveCells.put(new Point2D.Double(11, 12), 1);
+        aliveCells.put(new Point2D.Double(12, 12), 3);
+        aliveCells.put(new Point2D.Double(13, 12), 2);
+        aliveCells.put(new Point2D.Double(14, 12), 2);
+
+        aliveCells.put(new Point2D.Double(11, 13), 1);
+        aliveCells.put(new Point2D.Double(12, 13), 2);
+        aliveCells.put(new Point2D.Double(13, 13), 2);
+        aliveCells.put(new Point2D.Double(14, 13), 2);
+
+        aliveCells.put(new Point2D.Double(11, 14), 3);
+        aliveCells.put(new Point2D.Double(12, 14), 2);
+        aliveCells.put(new Point2D.Double(13, 14), 2);
+        aliveCells.put(new Point2D.Double(14, 14), 1);
+
+        ImmigrationBoard game = new ImmigrationBoard(gui, aliveCells, 3, 10, 50, 50, Color.BLACK, Color.WHITE, Color.LIGHT_GRAY);
     }
 }

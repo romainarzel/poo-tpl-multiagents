@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.HashSet;
 
-class SimBoard extends Board implements Simulable {
+class ConwayBoard extends Board implements Simulable {
     private final GUISimulator gui;
     private final int cellSize;
     private final Color maxStateCellColor;
@@ -15,7 +15,7 @@ class SimBoard extends Board implements Simulable {
     private final Color bgColor;
     private final HashSet<Point2D.Double> starter;
 
-    public SimBoard(GUISimulator gui, HashSet<Point2D.Double> starter, int cellSize, int width, int height, Color maxStateCellColor, Color deadCellColor, Color bgColor){
+    public ConwayBoard(GUISimulator gui, HashSet<Point2D.Double> starter, int cellSize, int width, int height, Color maxStateCellColor, Color deadCellColor, Color bgColor){
         super(width, height, starter);
         this.gui = gui;
         gui.setSimulable(this);

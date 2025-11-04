@@ -23,8 +23,12 @@ public class Cell {
         return state;
     }
 
+    public int nextState(){
+        return (state + 1) % (maxState + 1);
+    }
+
     private void setState(int state){
-        this.state = state % maxState;
+        this.state = state % (maxState + 1);
     }
 
     public float getPercent(){
@@ -43,9 +47,9 @@ public class Cell {
     * 4) If neither of these conditions is fulfilled then the cell doesn't change
      */
     public void newGenConway(int nbAliveNeighbours){
-        if (isAlive() & nbAliveNeighbours != 2 & nbAliveNeighbours != 3){
+        if (isAlive() && nbAliveNeighbours != 2 && nbAliveNeighbours != 3){
             state = 0;
-        } else if (!isAlive() & nbAliveNeighbours == 3){
+        } else if (!isAlive() && nbAliveNeighbours == 3){
             state = 1;
         }
     }
