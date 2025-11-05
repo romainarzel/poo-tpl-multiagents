@@ -5,14 +5,21 @@ import gui.GUISimulator;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
+import java.util.Random;
 
 public class GameOfImmigration {
     public static void main(String[] args){
         GUISimulator gui = new GUISimulator(600, 600, Color.BLACK);
 
-        HashMap<Point2D.Double, Integer> aliveCells = new HashMap<>(21);
+        int width = 50;
+        int height = 50;
+        int maxState = 4;
 
-        aliveCells.put(new Point2D.Double(10, 10), 3);
+        HashMap<Point2D.Double, Integer> aliveCells = new HashMap<>(width * height);
+        Random rng = new Random();
+
+        // Generates an example grid from the pdf given
+        /*aliveCells.put(new Point2D.Double(10, 10), 3);
         aliveCells.put(new Point2D.Double(12, 10), 1);
         aliveCells.put(new Point2D.Double(13, 10), 1);
 
@@ -36,8 +43,14 @@ public class GameOfImmigration {
         aliveCells.put(new Point2D.Double(11, 14), 3);
         aliveCells.put(new Point2D.Double(12, 14), 2);
         aliveCells.put(new Point2D.Double(13, 14), 2);
-        aliveCells.put(new Point2D.Double(14, 14), 1);
+        aliveCells.put(new Point2D.Double(14, 14), 1);*/
 
-        ImmigrationBoard game = new ImmigrationBoard(gui, aliveCells, 3, 10, 50, 50, Color.BLACK, Color.WHITE, Color.LIGHT_GRAY);
+        for (int col = 0; col < width; col++){
+            for (int lig = 0; lig < height; lig++){
+                aliveCells.put(new Point2D.Double(col, lig), rng.nextInt(maxState + 1));
+            }
+        }
+
+        ImmigrationBoard game = new ImmigrationBoard(gui, aliveCells, maxState, 10, width, height, Color.WHITE, Color.BLACK, Color.LIGHT_GRAY);
     }
 }
