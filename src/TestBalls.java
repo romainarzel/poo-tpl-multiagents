@@ -9,104 +9,90 @@ import gui.*;
 public class TestBalls {
     public static void main(String[] args){
         GUISimulator gui = new GUISimulator(800, 600, Color.BLACK);
-
-        Balls balls = new Balls(gui, Color.GREEN, 2);
+        BallsSimulator balls = new BallsSimulator(gui, Color.GREEN, 10);
     }
 }
 
-
-class Balls implements Simulable{
-    private GUISimulator gui;
-
-    private Color ballsColor;
-
+class Balls{
     private int ballsRadius;
+    private ArrayList<Point> points;
 
+    public Balls(int ballsRadius){
+        this.ballsRadius = ballsRadius;
+        reInit();
+    }
+
+    public int getRadius(){
+        return this.ballsRadius;
+    }
+
+    public ArrayList<Point> getPoints(){
+        return this.points;
+    }
+
+    public void reInit(){
+        points = new ArrayList<Point>();
+        for (int x = 10; x < 80; x += 50){
+            for (int y = 10; y < 60; y += 50){
+                points.add(new Point(x, y));
+            }
+        }
+    }
+
+    public void translate(int dx, int dy){
+        for(Point p : points){
+            p.translate(dx, dy);
+        }
+    }
+
+    @Override
+    public String toString() {
+        String str = "position des balles : \n";
+        for (Point p : points){
+            str += p.toString() + "\n";
+        }
+        return str;
+    }
+}
+
+class BallsSimulator extends Balls implements Simulable{
+    private GUISimulator gui;
+    private Color ballsColor;
     private Iterator<Integer> dxIterator;
-
     private Iterator<Integer> dyIterator;
 
-    private List<Point> points;
-
-    public Balls(GUISimulator gui, Color ballsColor, int ballsRadius){
+    public BallsSimulator(GUISimulator gui, Color ballsColor, int ballsRadius){
+        super(ballsRadius);
         this.gui = gui;
         gui.setSimulable(this);
         this.ballsColor = ballsColor;
-        this.ballsRadius = ballsRadius;
-
-        planCoordinates();
+        System.out.println(this.toString()); //Q.2 Affiche simplement l'état des balles sans graphismes
         draw();
-    }
-
-    private void planCoordinates(){
-
-        List<Point> newPoints = new ArrayList<Point>();
-
-        for (int x = 10; x < gui.getPanelHeight(); x += 50){
-            for (int y = 10; y < gui.getPanelWidth(); y += 50){
-                newPoints.add(new Point(x, y));
-            }
-        }
-
-        this.points = new ArrayList<Point>(newPoints);
-
-        ArrayList<Integer> xCoos = new ArrayList<Integer>();
-        ArrayList<Integer> yCoos = new ArrayList<Integer>();
-
-        for (int loop = 0; loop < 20; loop++){
-            xCoos.add(10);
-            yCoos.add(0);
-            xCoos.add(10);
-            yCoos.add(0);
-
-            xCoos.add(0);
-            yCoos.add(10);
-            xCoos.add(0);
-            yCoos.add(10);
-
-            xCoos.add(-10);
-            yCoos.add(0);
-            xCoos.add(-10);
-            yCoos.add(0);
-
-            xCoos.add(0);
-            yCoos.add(-10);
-            xCoos.add(0);
-            yCoos.add(-10);
-        }
-
-        dxIterator = xCoos.iterator();
-        dyIterator = yCoos.iterator();
     }
 
     private void draw(){
         gui.reset();
-
-        for (Point point : points){
-            gui.addGraphicalElement(new Oval(point.x, point.y, ballsColor, ballsColor, ballsRadius));
+        for (Point p : getPoints()){
+            gui.addGraphicalElement(new Oval(p.x, p.y, ballsColor, ballsColor, this.getRadius()));
         }
-
     }
 
     public void next(){
-        int dx = 0;
-        int dy = 0;
+        int dx = 1;
+        int dy = 1;
 
-        if (dxIterator.hasNext()){
-            dx = dxIterator.next();
-        } if (dyIterator.hasNext()){
-            dy = dyIterator.next();
-        }
-        for (Point point : points){
-            point.translate(dx, dy);
-        }
-
-        draw();
+        this.translate(dx, dy);
+        System.out.println(this.toString()); //Q.2 Affiche simplement l'état des balles sans graphismes
+        draw(); //Q.3 Affiche graphiquement
     }
 
     public void restart(){
-        planCoordinates();
-        draw();
+        //planCoordinates();
+        //draw();
+
+        this.reInit();
+        System.out.println(this.toString()); //Q.2 Affiche simplement l'état des balles sans graphismes
+        draw(); //Q.3 Affiche graphiquement
     }
 
 }
