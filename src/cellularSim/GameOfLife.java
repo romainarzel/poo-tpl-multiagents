@@ -36,7 +36,7 @@ public class GameOfLife {
         // Generate a random grid of alive cells
         for (int col = 0; col < width; col++){
             for (int lig = 0; lig < height; lig++){
-                if (rng.nextBoolean() && rng.nextBoolean()){
+                if (rng.nextBoolean() /*&& rng.nextBoolean()*/){ // You can uncomment the second test to make alive cells less likely
                     aliveCells.add(new Point2D.Double(col, lig));
                 }
             }
