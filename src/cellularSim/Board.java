@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Random;
 
 public class Board {
     private ArrayList<ArrayList<Cell>> cellBoard;
@@ -15,6 +16,13 @@ public class Board {
         this.height = height;
 
         setCellBoard(aliveCells, maxState);
+    }
+
+    public Board(int width, int height, HashMap<Point2D.Double, Integer> aliveCells, int maxState, int segSeuil){
+        this.width = width;
+        this.height = height;
+
+        setCellBoard(aliveCells, maxState, segSeuil);
     }
 
     public Board(int width, int height, HashSet<Point2D.Double> aliveCells){
@@ -46,6 +54,21 @@ public class Board {
                 coords.setLocation(col, lig);
 
                 cellBoard.get(lig).add(new Cell(aliveCells.getOrDefault(coords, 0), maxState));
+            }
+        }
+    }
+
+    public void setCellBoard(HashMap<Point2D.Double, Integer> aliveCells, int maxState, int segSeuil){
+        cellBoard = new ArrayList<>();
+        Point2D coords = new Point2D.Double();
+
+        for (int lig = 0; lig < height; lig++){
+            cellBoard.add(new ArrayList<>());
+
+            for (int col = 0; col < width; col++){
+                coords.setLocation(col, lig);
+
+                cellBoard.get(lig).add(new Cell(aliveCells.getOrDefault(coords, 0), maxState, segSeuil));
             }
         }
     }
@@ -114,6 +137,50 @@ public class Board {
         return count;
     }
 
+    private int getNbNeighboursDiff(int lig, int col){
+        int count = 0;
+        int state = cellBoard.get(lig).get(col).getState();
+        int cellState;
+
+        Point2D.Double adjCell = new Point2D.Double();
+
+        for (int addLig = -1; addLig <= 1; addLig++){
+            for (int addCol = -1; addCol <= 1; addCol++){
+                adjCell.setLocation(col + addCol, lig + addLig);
+                inBounds(adjCell); // If the coords are out of bounds wrap them around the other side
+
+                cellState = cellBoard.get((int)adjCell.getY()).get((int)adjCell.getX()).getState();
+
+                if ((addLig != 0 || addCol != 0) && cellState != 0 && cellState != state){ // need to check to not count itself
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    private ArrayList<Point2D.Double> listDeadNeighbours(int lig, int col){
+        int length = 8 - getNbAliveNeighbours(lig, col);
+        boolean isDead;
+        ArrayList<Point2D.Double> deadNeighbours = new ArrayList<>(length);
+
+        for (int addLig = -1; addLig <= 1; addLig++){
+            for (int addCol = -1; addCol <= 1; addCol++){
+                Point2D.Double adjCell = new Point2D.Double(col + addCol, lig + addLig);
+                inBounds(adjCell); // If the coords are out of bounds wrap them around the other side
+
+                isDead = !cellBoard.get((int)adjCell.getY()).get((int)adjCell.getX()).isAlive();
+
+                if ((addLig != 0 || addCol != 0) && isDead){ // need to check to not count itself
+                    deadNeighbours.add(adjCell);
+                }
+            }
+        }
+
+        return deadNeighbours;
+    }
+
     /*
     * If the given coordinates are out of bounds
     * => Wrap them around the other side
@@ -168,6 +235,32 @@ public class Board {
         for (int lig = 0; lig < height; lig++){ // Change the state of the cell according to the inner laws of the cell
             for (int col = 0; col < width; col++){
                 cellBoard.get(lig).get(col).newGenImmigration(listNeighbours.get(lig).get(col));
+            }
+        }
+    }
+
+    public void nextGenSeg(){
+        int nbNeighboursDiff;
+        int state;
+        Point2D newCoords;
+        ArrayList<Point2D.Double> deadNeighbours;
+
+        Random rng = new Random();
+
+        for (int lig = 0; lig < height; lig++){
+            for (int col = 0; col < width; col++){
+                nbNeighboursDiff = getNbNeighboursDiff(lig, col);
+
+                if (cellBoard.get(lig).get(col).newGenSeg(nbNeighboursDiff)){
+
+                    deadNeighbours = listDeadNeighbours(lig, col);
+                    if (!deadNeighbours.isEmpty()){
+                        newCoords = deadNeighbours.get(rng.nextInt(deadNeighbours.size()));
+
+                        state = cellBoard.get(lig).get(col).segKill();
+                        cellBoard.get((int)newCoords.getY()).get((int)newCoords.getX()).segMove(state);
+                    }
+                }
             }
         }
     }

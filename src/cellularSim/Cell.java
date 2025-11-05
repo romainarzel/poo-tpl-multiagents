@@ -2,20 +2,30 @@ package cellularSim;
 
 public class Cell {
     private final int maxState;
+    private final int segSeuil;
     private int state;
 
     public Cell(){
         state = 0;
         maxState = 1;
+        segSeuil = 0;
     }
 
     public Cell(int state){
         this.state = state;
         maxState = 1;
+        segSeuil = 0;
     }
 
     public Cell(int state, int maxState){
         this.maxState = maxState;
+        segSeuil = 0;
+        setState(state);
+    }
+
+    public Cell(int state, int maxState, int segSeuil){
+        this.maxState = maxState;
+        this.segSeuil = segSeuil;
         setState(state);
     }
 
@@ -58,6 +68,21 @@ public class Cell {
         if (nbNeighboursNextState > 2){
             setState(state + 1);
         }
+    }
+
+    public boolean newGenSeg(int nbNeighboursDiff){
+        return state > 0 && nbNeighboursDiff > segSeuil;
+    }
+
+    public int segKill(){
+        int state = this.state;
+        setState(0);
+
+        return state;
+    }
+
+    public void segMove(int state){
+        setState(state);
     }
 
     @Override

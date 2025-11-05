@@ -13,7 +13,7 @@ public class GameOfImmigration {
 
         int width = 50;
         int height = 50;
-        int maxState = 4;
+        int maxState = 3;
 
         HashMap<Point2D.Double, Integer> aliveCells = new HashMap<>(width * height);
         Random rng = new Random();
@@ -45,7 +45,7 @@ public class GameOfImmigration {
         aliveCells.put(new Point2D.Double(13, 14), 2);
         aliveCells.put(new Point2D.Double(14, 14), 1);*/
 
-        // Generated a grid of random cell values
+        // Generates a grid of random cell values
         for (int col = 0; col < width; col++){
             for (int lig = 0; lig < height; lig++){
                 aliveCells.put(new Point2D.Double(col, lig), rng.nextInt(maxState + 1));
