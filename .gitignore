@@ -1,3 +1,8 @@
 #minimal gitignore
 
 bin/ #build folder 
+
+#some file created by Intellij IDEA
+.idea/
+out/ 
+poo_tpl_multiagents.iml
