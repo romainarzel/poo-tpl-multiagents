@@ -1,32 +1,63 @@
-# Example de makefile pour compiler le squelette de code distribué
-# Vous pouvez compléter ce makefile, mais étant donnée la taille du projet, 
-# il est FORTEMENT recommandé d'utiliser un IDE!
+# ============= CONFIG ==================
 
-# Organisation:
-#  1) Les sources (*.java) se trouvent dans le répertoire src
-#     Les classes d'un package toto sont dans src/toto
-#     Les classes du package par defaut sont dans src
-#
-#  2) Les bytecodes (*.class) sont générés dans le répertoire bin
-#     La hiérarchie des sources (par package) est conservée.
-#
-#  3) Une librairie gui.jar est distribuée pour l'interface grapique. 
-#     Elle se trouve dans le sous-répertoire lib.
-#
-# Compilation:
-#  Options de javac:
-#   -d : répertoire dans lequel sont générés les .class compilés
-#   -sourcepath : répertoire dans lequel sont cherchés les .java
-#   -classpath : répertoire dans lequel sont cherchées les classes compilées (.class et .jar)
+SRC_DIR = src
+BIN_DIR = bin
+LIBS    = lib/gui.jar
+CP      = $(BIN_DIR):$(LIBS)
 
-all: runTestInvader 
+# ------------- SPECIFIC_SRC ------------
+INVADER_SRC = $(SRC_DIR)/TestInvader.java 
+BALLS_SRC = $(SRC_DIR)/TestBalls.java 
+GRAVITYBALL_SRC = $(SRC_DIR)/TestGravityBall.java 
+CELLULARSIM_SRC = $(SRC_DIR)/cellularSim/*.java
+SWARMSIM_SRC = $(SRC_DIR)/SwarmSim/*.java
+# ============= RULES ===================
 
-compileTestInvader:
-	javac -d bin -classpath lib/gui.jar src/TestInvader.java
+all: build
 
-runTestInvader: compileTestInvader
-	java -classpath bin:lib/gui.jar TestInvader
+# Compile ALL sources in src/ (preserves package structure)
+build:
+	javac -d $(BIN_DIR) -classpath $(LIBS) -sourcepath $(SRC_DIR) $(SRC_DIR)/**/*.java
+
+# ================== COMPILER ===================
+SPECIFIC_COMPILE_CMD = javac -d $(BIN_DIR) -classpath $(LIBS) 
+
+compileInvader: 
+	 $(SPECIFIC_COMPILE_CMD) $(INVADER_SRC) 
+compileTestBalls: 
+	 $(SPECIFIC_COMPILE_CMD) $(BALLS_SRC) 
+compileTestGravityBall: 
+	 $(SPECIFIC_COMPILE_CMD) $(GRAVITYBALL_SRC) 
+compileCellularSim: 
+	 $(SPECIFIC_COMPILE_CMD) $(CELLULARSIM_SRC) 
+compileSwarmSim: 
+	 $(SPECIFIC_COMPILE_CMD) $(SWARMSIM_SRC) 
+# ================== RUNNERS ====================
+RUN_CMD = java -classpath $(CP)
+
+runInvader: compileInvader
+	$(RUN_CMD) TestInvader
+
+runTestBalls: compileTestBalls
+	$(RUN_CMD) TestBalls
+
+runTestGravityBall: compileTestGravityBall
+	$(RUN_CMD) TestGravityBall
+
+runGameOfLife: compileCellularSim
+	$(RUN_CMD) cellularSim.GameOfLife
+
+runGameOfImmigration:  compileCellularSim
+	$(RUN_CMD) cellularSim.GameOfImmigration
+
+runSegregationSim:  compileCellularSim
+	$(RUN_CMD) cellularSim.SegregationSim
+
+runSwarm: compileSwarmSim
+	$(RUN_CMD) SwarmSim.SwarmSim
+
+# ================== HOUSEKEEPING ================
 
 clean:
-	rm -rf bin/
+	rm -rf $(BIN_DIR)/*
 
