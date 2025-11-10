@@ -1,6 +1,6 @@
 #minimal gitignore
 
-bin/ #build folder 
+bin/ 
 
 #some file created by Intellij IDEA
 .idea/
