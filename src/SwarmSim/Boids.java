@@ -5,6 +5,7 @@ import gui.GraphicalElement;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,27 +14,41 @@ public class Boids extends Element implements GraphicalElement {
     private double size;
     private Color color;
 
+    // wall to avoid
+    private int windowWidth;
+    private int windowHeight;
+
+
     // Double-buffered future state
     private double nextDirection;
     private double nextVelocity;
 
     // Parameters
+    private static final double WALL_MARGIN = 30.0;         // distance from walls where boid starts turning
+    private static final double WALL_TURN_STRENGTH = 0.85;   // how strongly it turns away
     private static final double NEIGHBOR_RADIUS = 150;
     private static final double SEPARATION_RADIUS = 40;
     private static final double SEPARATION_STRENGTH = 1.75;
-    private static final double COHESION_STRENGTH = 0.01;
+    private static final double COHESION_STRENGTH = 0.005;
     private static final double MAX_VELOCITY = 3.5;
     private static final double MIN_VELOCITY = 0.5;
+    private static final double BOIDS_SIZE = 20;
 
 
-    public Boids (int x, int y , double velocity, double direction, Color color) {
-        this.x = x;
-        this.y = y;
+    public Boids (int x, int y , double velocity, double direction, Color color, int wallX, int wallY ) {
 
+        if (wallX <= 0 || wallY <= 0){
+            throw new IllegalArgumentException("Wall cannot be inferior to 1");
+        }
+        this.windowWidth = wallX;
+        this.windowHeight = wallY;
 
-        this.velocity = velocity;
-        this.direction = direction;
-        this.size = 20;
+        System.out.println("Screen for boid x: "+wallX+ " y: "+ wallY);
+        this.x = Math.clamp(x,0,wallX);
+        this.y = Math.clamp(y,0,wallY);
+        this.velocity = Math.clamp(velocity,MIN_VELOCITY,MAX_VELOCITY);
+        this.direction = direction % Math.PI;
+        this.size = BOIDS_SIZE;
         this.color = color;
     }
 
@@ -144,6 +159,11 @@ public class Boids extends Element implements GraphicalElement {
         avgVx += cohX;
         avgVy += cohY;
 
+        // Wall avoidance
+        Point2D.Double wall = wallAvoidance();
+        avgVx += wall.x;
+        avgVy += wall.y;
+
         nextVelocity = Math.sqrt(avgVx * avgVx + avgVy * avgVy);
         if (nextVelocity < MIN_VELOCITY) {
             nextVelocity = MIN_VELOCITY;
@@ -185,4 +205,35 @@ public class Boids extends Element implements GraphicalElement {
             g.dispose();
         }
     }
+
+
+    private Point2D.Double wallAvoidance() {
+        double fx = 0;
+        double fy = 0;
+
+        // Left wall
+        if (x < WALL_MARGIN) {
+            fx += (WALL_MARGIN - x) / WALL_MARGIN;
+        }
+        // Right wall
+        if (x > windowWidth - WALL_MARGIN) {
+            fx -= (x - (windowWidth - WALL_MARGIN)) / WALL_MARGIN;
+        }
+
+        // Top wall
+        if (y < WALL_MARGIN) {
+            fy += (WALL_MARGIN - y) / WALL_MARGIN;
+        }
+        // Bottom wall
+        if (y > windowHeight - WALL_MARGIN) {
+            fy -= (y - (windowHeight - WALL_MARGIN)) / WALL_MARGIN;
+        }
+
+        // Apply tuning strength
+        fx *= WALL_TURN_STRENGTH;
+        fy *= WALL_TURN_STRENGTH;
+
+        return new Point2D.Double(fx, fy);
+    }
+
 }

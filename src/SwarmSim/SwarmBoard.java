@@ -8,14 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+
 public class SwarmBoard implements Simulable {
 
     private GUISimulator gui;
+    private int nbBoids;
     private List<Boids> boids;
 
-    public SwarmBoard(GUISimulator gui,List<Boids> boids){
+    public SwarmBoard(GUISimulator gui,int nbBoids){
         this.gui = gui;
-        this.boids = boids;
+        if (nbBoids < 1) {
+            throw new IllegalArgumentException("number of Boids need to be superior to 1");
+        }
+        this.nbBoids = nbBoids;
+        this.boids = initListBoidRandom(nbBoids);
 
         gui.setSimulable(this);
         gui.reset();
@@ -43,7 +49,7 @@ public class SwarmBoard implements Simulable {
            velocity = rng.nextDouble(0.1 , 3);
 
 
-           lb.add( new Boids(x,y,velocity,direction, Color.PINK));
+           lb.add( new Boids(x,y,velocity,direction, Color.PINK,gui.getPanelWidth(),gui.getPanelHeight()));
 
         }
         return lb;
@@ -56,7 +62,7 @@ public class SwarmBoard implements Simulable {
         }
         for (Boids b : boids){
             b.applyUpdate();
-            b.wrapPosition(gui.getWidth(), gui.getHeight());
+            b.wrapPosition(gui.getPanelWidth(), gui.getPanelHeight());
         }
         draw();
 
@@ -64,7 +70,7 @@ public class SwarmBoard implements Simulable {
 
     @Override
     public void restart() {
-        this.boids = initListBoidRandom(45);
+        this.boids = initListBoidRandom(this.nbBoids);
         draw();
 
     }
