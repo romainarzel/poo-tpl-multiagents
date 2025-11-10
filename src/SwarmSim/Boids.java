@@ -18,8 +18,10 @@ public class Boids extends Element implements GraphicalElement {
     private double nextVelocity;
 
     // Parameters
-    private static final double NEIGHBOR_RADIUS = 200;
-    private static final double SEPARATION_RADIUS = 50;
+    private static final double NEIGHBOR_RADIUS = 100;
+    private static final double SEPARATION_RADIUS = 30;
+    private static final double SEPARATION_STRENGTH = 0.5;
+
 
     public Boids (int x, int y , double velocity, double direction, Color color) {
         this.x = x;
@@ -35,6 +37,7 @@ public class Boids extends Element implements GraphicalElement {
     // Compute next orientation + next position, but DO NOT apply yet
     public void updateBoids(List<Boids> all) {
 
+        // ---- Collect neighbors ----
         List<Boids> neighbors = new ArrayList<>();
         for (Boids b : all) {
             if (b == this) continue;
@@ -49,17 +52,17 @@ public class Boids extends Element implements GraphicalElement {
             return;
         }
 
-        nextDirection = this.direction;
+        // Keep same speed unless alignment changes it
         nextVelocity = this.velocity;
 
-        // ----------------- WEIGHTED ALIGNMENT (direction + velocity) -----------------
+        //  WEIGHTED ALIGNMENT (direction + velocity)
         double sumVx = this.velocity * Math.sin(this.direction);   // weight = 1 for self
         double sumVy = this.velocity * -Math.cos(this.direction);
         double totalWeight = 1.0;
 
         for (Boids b : neighbors) {
             double dist = this.distance(b);
-            double weight = 1.0 / (dist + 0.0001);
+            double weight = 1.0 / (dist + 0.0001);  // closer → stronger
 
             double bd = b.getDirection();
             double bv = b.getVelocity();
@@ -68,25 +71,48 @@ public class Boids extends Element implements GraphicalElement {
             double vx = bv * Math.sin(bd);
             double vy = bv * -Math.cos(bd);
 
-            // Weighted accumulation
             sumVx += vx * weight;
             sumVy += vy * weight;
-
             totalWeight += weight;
         }
 
-// Average velocity vector
+        // Average velocity vector from alignment
         double avgVx = sumVx / totalWeight;
         double avgVy = sumVy / totalWeight;
 
-// Convert back to polar coordinates
-        nextVelocity = Math.sqrt(avgVx*avgVx + avgVy*avgVy);
+        //  SEPARATION (repulsion when too close)
+        double sepX = 0;
+        double sepY = 0;
+
+        for (Boids b : neighbors) {
+            double dist = this.distance(b);
+
+            if (dist < SEPARATION_RADIUS) {
+                // push away from neighbor
+                double dx = this.x - b.x;
+                double dy = this.y - b.y;
+
+                double inv = 1.0 / (dist + 0.0001);
+                dx *= inv;
+                dy *= inv;
+
+                // force grows when distance gets smaller
+                double force = (SEPARATION_RADIUS - dist) / SEPARATION_RADIUS;
+
+                sepX += dx * force;
+                sepY += dy * force;
+            }
+        }
+
+        // Apply separation influence
+        avgVx += sepX * SEPARATION_STRENGTH;
+        avgVy += sepY * SEPARATION_STRENGTH;
+
+        nextVelocity = Math.sqrt(avgVx * avgVx + avgVy * avgVy);
         nextDirection = Math.atan2(avgVx, -avgVy);
+    }
 
-
-}
-
-    // Apply buffered values (second phase)
+    // Apply buffered values
     public void applyUpdate() {
         this.direction = nextDirection;
         this.velocity = nextVelocity;
