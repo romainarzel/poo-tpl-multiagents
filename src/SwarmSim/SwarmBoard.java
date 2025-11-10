@@ -56,6 +56,7 @@ public class SwarmBoard implements Simulable {
         }
         for (Boids b : boids){
             b.applyUpdate();
+            b.wrapPosition(gui.getWidth(), gui.getHeight());
         }
         draw();
 

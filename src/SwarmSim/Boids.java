@@ -18,9 +18,12 @@ public class Boids extends Element implements GraphicalElement {
     private double nextVelocity;
 
     // Parameters
-    private static final double NEIGHBOR_RADIUS = 100;
-    private static final double SEPARATION_RADIUS = 30;
-    private static final double SEPARATION_STRENGTH = 0.5;
+    private static final double NEIGHBOR_RADIUS = 150;
+    private static final double SEPARATION_RADIUS = 40;
+    private static final double SEPARATION_STRENGTH = 1.75;
+    private static final double COHESION_STRENGTH = 0.01;
+    private static final double MAX_VELOCITY = 3.5;
+    private static final double MIN_VELOCITY = 0.5;
 
 
     public Boids (int x, int y , double velocity, double direction, Color color) {
@@ -32,6 +35,14 @@ public class Boids extends Element implements GraphicalElement {
         this.direction = direction;
         this.size = 20;
         this.color = color;
+    }
+
+    public void wrapPosition(int width, int height) {
+        if (x < 0) x += width;
+        if (x >= width) x -= width;
+
+        if (y < 0) y += height;
+        if (y >= height) y -= height;
     }
 
     // Compute next orientation + next position, but DO NOT apply yet
@@ -108,7 +119,38 @@ public class Boids extends Element implements GraphicalElement {
         avgVx += sepX * SEPARATION_STRENGTH;
         avgVy += sepY * SEPARATION_STRENGTH;
 
+
+        //  COHESION (move toward center of neighbors)
+        double comX = 0;
+        double comY = 0;
+        totalWeight = 0;
+
+        for (Boids b : neighbors) {
+            double dist = this.distance(b);
+            double w = 1.0 / (dist + 0.0001);
+
+            comX += b.x * w;
+            comY += b.y * w;
+            totalWeight += w;
+        }
+
+        comX /= totalWeight;
+        comY /= totalWeight;
+
+        // vector toward center of mass
+        double cohX = (comX - this.x) * COHESION_STRENGTH;
+        double cohY = (comY - this.y) * COHESION_STRENGTH;
+
+        avgVx += cohX;
+        avgVy += cohY;
+
         nextVelocity = Math.sqrt(avgVx * avgVx + avgVy * avgVy);
+        if (nextVelocity < MIN_VELOCITY) {
+            nextVelocity = MIN_VELOCITY;
+        }
+        if (nextVelocity > MAX_VELOCITY) {
+            nextVelocity = MAX_VELOCITY;
+        }
         nextDirection = Math.atan2(avgVx, -avgVy);
     }
 
