@@ -109,5 +109,4 @@ class BallsSimulator extends Balls implements Simulable{
         System.out.println(this); //Q.2 Affiche simplement l'état des balles sans graphismes
         draw(); //Q.3 Affiche graphiquement
     }
-
 }

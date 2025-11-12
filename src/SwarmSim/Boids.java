@@ -8,6 +8,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Boids extends Element implements GraphicalElement {
 
     private double size;
