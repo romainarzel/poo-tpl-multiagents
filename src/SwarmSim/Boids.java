@@ -1,7 +1,6 @@
 package SwarmSim;
 
 import gui.GraphicalElement;
-
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
@@ -20,8 +19,8 @@ public class Boids extends Element implements GraphicalElement {
 
 
     // Double-buffered future state
-    private double nextDirection;
-    private double nextVelocity;
+    protected double nextDirection;
+    protected double nextVelocity;
 
     // Parameters
     private static final double WALL_MARGIN = 30.0;         // distance from walls where boid starts turning
@@ -44,9 +43,9 @@ public class Boids extends Element implements GraphicalElement {
         this.windowHeight = wallY;
 
         System.out.println("Screen for boid x: "+wallX+ " y: "+ wallY);
-        this.x = Math.clamp(x,0,wallX);
-        this.y = Math.clamp(y,0,wallY);
-        this.velocity = Math.clamp(velocity,MIN_VELOCITY,MAX_VELOCITY);
+        this.x = clamp(x,0,wallX);
+        this.y = clamp(y,0,wallY);
+        this.velocity = clamp(velocity,MIN_VELOCITY,MAX_VELOCITY);
         this.direction = direction % Math.PI;
         this.size = BOIDS_SIZE;
         this.color = color;
@@ -234,6 +233,15 @@ public class Boids extends Element implements GraphicalElement {
         fy *= WALL_TURN_STRENGTH;
 
         return new Point2D.Double(fx, fy);
+    }
+
+    // Local clamp helpers for Java versions without Math.clamp
+    private static int clamp(int value, int min, int max) {
+        return Math.max(min, Math.min(value, max));
+    }
+
+    private static double clamp(double value, double min, double max) {
+        return Math.max(min, Math.min(value, max));
     }
 
 }
