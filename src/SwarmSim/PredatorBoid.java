@@ -1,9 +1,8 @@
 package SwarmSim;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.Collections;
 import java.util.List;
-
 
 public class PredatorBoid extends Boids {
 
@@ -23,31 +22,33 @@ public class PredatorBoid extends Boids {
         if (targets.isEmpty()) return;
 
         Boids nearest = null;
-        double best = java.lang.Double.MAX_VALUE;
-
-
+        double best = java.lang.Double.POSITIVE_INFINITY;
         for (Boids t : targets) {
             double d = this.distance(t);
-            if (d < best) { best = d; nearest = t; }
+            if (d < best) {
+                best = d;
+                nearest = t;
+            }
         }
         if (nearest == null) return;
 
         double dx = nearest.x - this.x;
         double dy = nearest.y - this.y;
-        double desired = Math.atan2(dx, -dy);
+        double desired = Math.atan2(dy, dx);
 
-        double alpha = 0.35; // pursuit aggressiveness
+        double alpha = 0.35;
         this.nextDirection = blendAngles(this.nextDirection, desired, alpha);
 
-        this.nextVelocity = Math.min(this.nextVelocity + 0.3, 3.5);
+        double maxSpeed = 3.5;
+        double accel = 0.3;
+        this.nextVelocity = Math.min(this.nextVelocity + accel, maxSpeed);
+
+        if (best < 25) this.nextVelocity *= 0.9;
     }
 
     private static double blendAngles(double a, double b, double t) {
-        double x1 = Math.sin(a), y1 = Math.cos(a);
-        double x2 = Math.sin(b), y2 = Math.cos(b);
-        double x = (1 - t) * x1 + t * x2;
-        double y = (1 - t) * y1 + t * y2;
-        return Math.atan2(x, y);
+        double x = (1 - t) * Math.cos(a) + t * Math.cos(b);
+        double y = (1 - t) * Math.sin(a) + t * Math.sin(b);
+        return Math.atan2(y, x);
     }
 }
-
