@@ -23,7 +23,9 @@ public class PredatorBoid extends Boids {
         if (targets.isEmpty()) return;
 
         Boids nearest = null;
-        double best = Double.distance(x, y, x, y);
+        double best = java.lang.Double.MAX_VALUE;
+
+
         for (Boids t : targets) {
             double d = this.distance(t);
             if (d < best) { best = d; nearest = t; }
