@@ -1,4 +1,24 @@
-# TPL 2A POO
+# Description des différents fichiers et dossiers
+
+## Animation d'une balle
+
+La première partie portant sur l'nimation d'une balle différents fichiers ont été créés pour cette anilation. Ainsi : 
+
+Code 1 – TestGravityBall / GravityBall
+
+Contient une simulation d’une balle unique soumise à la gravité et aux rebonds. Le code définit la classe GravityBall avec ses attributs (couleur, rayon, vitesse, force de gravité, coefficient de rebond) et gère le mouvement, les collisions avec les bords et le dessin dans la fenêtre graphique via GUISimulator. Le programme principal crée et lance une instance de balle.
+
+Code 2 – TestBalls / BallsSimulator
+
+Contient une simulation de plusieurs balles se déplaçant simultanément. La classe Balls stocke les positions et vitesses de chaque balle, et BallsSimulator gère la translation, les collisions avec les bords et le dessin graphique de toutes les balles dans la fenêtre GUISimulator. Le programme principal initialise le simulateur avec un ensemble de balles.
+
+## Automate cellulaire 
+
+### Le jeu de la vie de Conway
+
+
+
+# TPL 2A POO 
 
 Les ressources distribuées contiennent:
 
