@@ -4,7 +4,7 @@
 
 La première partie portant sur l'nimation d'une balle différents fichiers ont été créés pour cette anilation. Ainsi : 
 
-TestGravityBall / GravityBall
+    **TestGravityBall / GravityBall**
 
 Contient une simulation d’une balle unique soumise à la gravité et aux rebonds. Le code définit la classe GravityBall avec ses attributs (couleur, rayon, vitesse, force de gravité, coefficient de rebond) et gère le mouvement, les collisions avec les bords et le dessin dans la fenêtre graphique via GUISimulator. Le programme principal crée et lance une instance de balle.
 
