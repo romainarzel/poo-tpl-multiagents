@@ -29,7 +29,7 @@ public class Boids extends Element implements GraphicalElement {
     private static final double NEIGHBOR_RADIUS = 150;
     private static final double SEPARATION_RADIUS = 40;
     private static final double SEPARATION_STRENGTH = 1.75;
-    private static final double COHESION_STRENGTH = 0.005;
+    private static final double COHESION_STRENGTH = 0.0005;
     private static final double MAX_VELOCITY = 3.5;
     private static final double MIN_VELOCITY = 0.5;
     private static final double BOIDS_SIZE = 20;
