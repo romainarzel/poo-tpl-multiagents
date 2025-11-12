@@ -1,7 +1,7 @@
 import java.awt.Color;
 import java.awt.Point;
-
 import gui.*;
+
 
 public class TestGravityBall {
     public static void main(String[] args) {
@@ -28,7 +28,6 @@ class GravityBall extends Point implements Simulable{
         this.ballRadius = ballRadius;
         this.ballBounce = ballBounce;
         this.gravityStrength = gravityStrength;
-
         init();
         draw();
     }
