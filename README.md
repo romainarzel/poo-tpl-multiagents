@@ -4,11 +4,11 @@
 
 La première partie portant sur l'nimation d'une balle différents fichiers ont été créés pour cette anilation. Ainsi : 
 
-<u>TestGravityBall</u> / <u>GravityBall</u>
+   **TestGravityBall/ GravityBall**
 
 Contient une simulation d’une balle unique soumise à la gravité et aux rebonds. Le code définit la classe GravityBall avec ses attributs (couleur, rayon, vitesse, force de gravité, coefficient de rebond) et gère le mouvement, les collisions avec les bords et le dessin dans la fenêtre graphique via GUISimulator. Le programme principal crée et lance une instance de balle.
 
-TestBalls / BallsSimulator
+   **TestBalls / BallsSimulator**
 
 Contient une simulation de plusieurs balles se déplaçant simultanément. La classe Balls stocke les positions et vitesses de chaque balle, et BallsSimulator gère la translation, les collisions avec les bords et le dessin graphique de toutes les balles dans la fenêtre GUISimulator. Le programme principal initialise le simulateur avec un ensemble de balles.
 
@@ -16,11 +16,11 @@ Contient une simulation de plusieurs balles se déplaçant simultanément. La cl
 
 Pour cette partie des automates une partie graphique a du être créée pour les différents jeux codés après. 
 
-Board (cellularSim)
+   **Board (cellularSim)**
 
 Contient la gestion d’un plateau pour simulation cellulaire. La classe Board crée une grille de cellules (Cell) et gère le calcul des voisins, les états des cellules, et les évolutions selon différents types de règles (Conway, Immigration, Seg). Le code inclut aussi la logique de bordures “wrap-around” et de propagation d’états pour chaque génération.
 
-Cell (cellularSim)
+   **Cell (cellularSim)**
 
 Contient la définition d’une cellule pour simulation cellulaire. La classe Cell gère l’état de la cellule, son état maximum, et un seuil spécifique (segSeuil). Elle inclut les règles d’évolution pour différents types de simulations (Conway, Immigration, Seg), la vérification si la cellule est vivante, et la gestion de transitions d’état.
 
@@ -28,34 +28,34 @@ Contient la définition d’une cellule pour simulation cellulaire. La classe Ce
 ### Le jeu de la vie de Conway
 
 
-ConwayBoard (cellularSim)
+   **ConwayBoard (cellularSim)**
 
 Contient la simulation graphique du jeu de la vie de Conway. La classe ConwayBoard hérite de Board et utilise GUISimulator pour dessiner chaque cellule avec un dégradé de couleur selon son état. Elle gère l’évolution des générations, le rafraîchissement graphique et la réinitialisation du plateau à son état de départ.
 
 
-GameOfLife (cellularSim)
+   **GameOfLife (cellularSim)**
 
 Contient le programme principal pour lancer une simulation graphique du jeu de la vie de Conway. Le code initialise une grille de cellules vivantes (aléatoire ou prédéfinie) et crée une instance de ConwayBoard qui gère l’évolution des générations et le rendu graphique via GUISimulator.
 
 
 ### Le jeu de l'immigration
 
-ImmigrationBoard (cellularSim)
+   **ImmigrationBoard (cellularSim)**
 
 Contient la simulation graphique du jeu de l’Immigration. La classe ImmigrationBoard hérite de Board et utilise GUISimulator pour dessiner les cellules avec un dégradé de couleur selon leur état. Elle gère l’évolution des générations selon la règle d’Immigration, le rafraîchissement graphique et la réinitialisation du plateau à son état initial.
 
-GameOfImmigration (cellularSim)
+   **GameOfImmigration (cellularSim)**
 
 Contient le programme principal pour lancer une simulation graphique du jeu de l’Immigration. Le code initialise une grille de cellules avec des états aléatoires (ou définis), puis crée une instance d’ImmigrationBoard qui gère l’évolution des générations selon la règle d’Immigration et le dessin graphique via GUISimulator.
 
 
 ### Le modèle de Schelling
 
-SegBoard (cellularSim)
+   **SegBoard (cellularSim)**
 
 Contient la simulation graphique d’un plateau cellulaire avec règles “Seg”. La classe SegBoard hérite de Board et utilise GUISimulator pour dessiner les cellules avec un dégradé de couleur selon leur état et seuil spécifique (segSeuil). Elle gère l’évolution des générations selon la règle Seg, le rafraîchissement graphique et la réinitialisation du plateau à son état initial.
 
-SegregationSim (cellularSim)
+   **SegregationSim (cellularSim)**
 
 Contient le programme principal pour lancer une simulation graphique du modèle de ségrégation. Le code initialise une grille de cellules avec des états aléatoires selon un pourcentage de cellules mortes, puis crée une instance de SegBoard qui gère l’évolution des générations selon la règle de ségrégation et le rendu graphique via GUISimulator.
 
