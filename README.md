@@ -1,8 +1,29 @@
 # Description des différents fichiers et dossiers
 
+Le projet contenait initialeùent un fichier nous permettant de nous donner un exemple d'animation pour tout le projet : 
+
+
+   **TestInvader**
+
+Contient le programme principal lançant une petite animation de type Space Invader. Le code crée une fenêtre graphique GUISimulator et y associe une instance de Invader. L’Invader est ensuite animé automatiquement via les commandes next et restart de l’interface graphique.
+
+   **Invader**
+
+Contient la classe qui représente et anime un mini-“Space Invader” pixelisé dans une fenêtre graphique.
+La classe Invader :
+-gère la position de l’invader (x, y) ;
+-planifie un chemin prédéfini (droite → bas → gauche) grâce à deux itérateurs ;
+-redessine entièrement la figure à chaque pas via de multiples petits rectangles (pixels) ;
+-implémente Simulable pour permettre l’évolution (next) et le redémarrage (restart) dans la GUI.
+L’ensemble forme une animation simple et pédagogique pour illustrer le fonctionnement d’un simulateur graphique.
+
+
+
+
+
 ## Animation d'une balle
 
-La première partie portant sur l'nimation d'une balle différents fichiers ont été créés pour cette anilation. Ainsi : 
+La première partie portant sur l'animation d'une balle différents fichiers ont été créés pour cette anilation. Ainsi : 
 
    **TestGravityBall/ GravityBall**
 
