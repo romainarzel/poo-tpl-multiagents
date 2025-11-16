@@ -11,6 +11,13 @@ public class Board {
     private final int width;
     private final int height;
 
+    /**
+     * Constructeur utiliser pour la variante de l'immigration
+     * @param width la largeur de la grille
+     * @param height la hauteur de la grille
+     * @param aliveCells map des états des cellules vivantes : clés = coords, valeurs = états
+     * @param maxState l'état maximal des cellules
+     */
     public Board(int width, int height, HashMap<Point2D.Double, Integer> aliveCells, int maxState){
         this.width = width;
         this.height = height;
@@ -18,6 +25,14 @@ public class Board {
         setCellBoard(aliveCells, maxState);
     }
 
+    /**
+     * Constructeur utilisé par la variante de la ségrégation
+     * @param width la largeur de la grille
+     * @param height la hauteur de la grille
+     * @param aliveCells map des états des cellules vivantes : clés = coords, valeurs = états
+     * @param maxState l'état maximal des cellules
+     * @param segSeuil le seuil de ségrégation
+     */
     public Board(int width, int height, HashMap<Point2D.Double, Integer> aliveCells, int maxState, int segSeuil){
         this.width = width;
         this.height = height;
@@ -25,13 +40,25 @@ public class Board {
         setCellBoard(aliveCells, maxState, segSeuil);
     }
 
+    /**
+     * Constructeur utilisé par le jeu de la vie
+     * @param width la largeur de la grille
+     * @param height la hauteur de la grille
+     * @param aliveCells ensemble des cellules vivantes
+     */
     public Board(int width, int height, HashSet<Point2D.Double> aliveCells){
         this.width = width;
         this.height = height;
         setCellBoard(aliveCells);
     }
 
-    public float getPercent(int lig, int col){
+    /**
+     * Récupère l'état de la cellule en pourcentage entre son état minimal et maximal
+     * @param lig ligne de le cellule
+     * @param col colonne de la cellule
+     * @return le pourcentage, entier entre 0 et 100
+     */
+    public int getPercent(int lig, int col){
         return cellBoard.get(lig).get(col).getPercent();
     }
 
@@ -43,6 +70,11 @@ public class Board {
         return height;
     }
 
+    /**
+     * Initialise la grille pour la variante de l'immigration
+     * @param aliveCells map des états des cellules vivantes : clés = coords, valeurs = états
+     * @param maxState l'état maximal des cellule
+     */
     public void setCellBoard(HashMap<Point2D.Double, Integer> aliveCells, int maxState){
         cellBoard = new ArrayList<>();
         Point2D coords = new Point2D.Double();
@@ -58,6 +90,12 @@ public class Board {
         }
     }
 
+    /**
+     * Initialise la grille pour la variante de la ségrégation
+     * @param aliveCells map des états des cellules vivantes : clés = coords, valeurs = états
+     * @param maxState l'état maximal des cellule
+     * @param segSeuil le seuil de ségrégation
+     */
     public void setCellBoard(HashMap<Point2D.Double, Integer> aliveCells, int maxState, int segSeuil){
         cellBoard = new ArrayList<>();
         Point2D coords = new Point2D.Double();
@@ -73,6 +111,10 @@ public class Board {
         }
     }
 
+    /**
+     * Initialise le grille pour le jeu de la vie
+     * @param aliveCells ensemble des cellules vivantes
+     */
     public void setCellBoard(HashSet<Point2D.Double> aliveCells){
         cellBoard = new ArrayList<>();
         Point2D coords = new Point2D.Double();
@@ -92,6 +134,12 @@ public class Board {
         }
     }
 
+    /**
+     * Donne le nombre de voisins vivants pour une cellule renseignée
+     * @param lig ligne de la cellule
+     * @param col colonne de la cellule
+     * @return le nombre de voisins vivants
+     */
     private int getNbAliveNeighbours(int lig, int col){
         int count = 0;
         boolean isCellAlive;
@@ -114,6 +162,12 @@ public class Board {
         return count;
     }
 
+    /**
+     * Donne le nombre de voisins dans l'état suivant celui de la cellule renseignée
+     * @param lig la ligne de la cellule
+     * @param col la colonne de la cellule
+     * @return le nombre de voisins dans l'état suivant
+     */
     private int getNbNeighboursNextState(int lig, int col){
         int count = 0;
         int nextState = cellBoard.get(lig).get(col).nextState();
@@ -126,7 +180,7 @@ public class Board {
                 adjCell.setLocation(col + addCol, lig + addLig);
                 inBounds(adjCell); // If the coords are out of bounds wrap them around the other side
 
-                cellState = cellBoard.get((int)adjCell.getY()).get((int)adjCell.getX()).getState();
+                cellState = cellBoard.get((int)adjCell.getY()).get((int)adjCell.getX()).getPercent();
 
                 if ((addLig != 0 || addCol != 0) && cellState == nextState){ // need to check to not count itself
                     count++;
@@ -137,9 +191,15 @@ public class Board {
         return count;
     }
 
+    /**
+     * Donne le nombre de voisins dans un état différent de celui de la cellule renseignée
+     * @param lig la ligne de la cellule
+     * @param col la colonne de la cellule
+     * @return le nombre de voisins différents
+     */
     private int getNbNeighboursDiff(int lig, int col){
         int count = 0;
-        int state = cellBoard.get(lig).get(col).getState();
+        int state = cellBoard.get(lig).get(col).getPercent();
         int cellState;
 
         Point2D.Double adjCell = new Point2D.Double();
@@ -149,7 +209,7 @@ public class Board {
                 adjCell.setLocation(col + addCol, lig + addLig);
                 inBounds(adjCell); // If the coords are out of bounds wrap them around the other side
 
-                cellState = cellBoard.get((int)adjCell.getY()).get((int)adjCell.getX()).getState();
+                cellState = cellBoard.get((int)adjCell.getY()).get((int)adjCell.getX()).getPercent();
 
                 if ((addLig != 0 || addCol != 0) && cellState != 0 && cellState != state){ // need to check to not count itself
                     count++;
@@ -160,6 +220,12 @@ public class Board {
         return count;
     }
 
+    /**
+     * Donne une liste des voisins morts (places vacantes pour un déménagement) de la cellule renseignée
+     * @param lig ligne de la cellule
+     * @param col colonne de la cellule
+     * @return la liste des voisins morts
+     */
     private ArrayList<Point2D.Double> listDeadNeighbours(int lig, int col){
         int length = 8 - getNbAliveNeighbours(lig, col);
         boolean isDead;
@@ -188,6 +254,15 @@ public class Board {
     *
     * It's like a donut but in 2D !!!
      */
+
+    /**
+     * Assure que les coordonnées du point soit comprises dans la grille, si ce n'est pas le cas,
+     * modifie les coordonées en considérant la continuité des bords
+     * (cela revient à considérer la grille comme un donut)
+     *
+     * <p>Mmmmmmh... donut!</p>
+     * @param p le point de coordonnées à vérifier
+     */
     private void inBounds(Point2D.Double p){
         double x = p.getX();
         double y = p.getY();
@@ -207,6 +282,9 @@ public class Board {
         p.setLocation(x, y);
     }
 
+    /**
+     * Modifie la grille selon les règles du jeu de la vie de Conway
+     */
     public void nextGenConway(){
         ArrayList<ArrayList<Integer>> listNeighbours = new ArrayList<>();
         for (int lig = 0; lig < height; lig++){ // Calculate the number of neighbours for each cell
@@ -223,6 +301,9 @@ public class Board {
         }
     }
 
+    /**
+     * Modifie la grille selon les règles de la variante de l'immigration
+     */
     public void nextGenImmigration(){
         ArrayList<ArrayList<Integer>> listNeighbours = new ArrayList<>();
         for (int lig = 0; lig < height; lig++){ // Calculate the number of neighbours for each cell
@@ -239,6 +320,9 @@ public class Board {
         }
     }
 
+    /**
+     * Modifie les règles selon la variante de la ségrégation
+     */
     public void nextGenSeg(){
         int nbNeighboursDiff;
         int state;
