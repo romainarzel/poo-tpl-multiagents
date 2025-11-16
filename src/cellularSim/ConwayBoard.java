@@ -15,6 +15,17 @@ class ConwayBoard extends Board implements Simulable {
     private final Color bgColor;
     private final HashSet<Point2D.Double> starter;
 
+    /**
+     * Constructeur d'une grille du jeu de la vie de Conway
+     * @param gui l'interface graphique
+     * @param starter l'ensemble des cellules vivantes
+     * @param cellSize la longueur d'un côté d'une cellule
+     * @param width la largeur de la grille en cellules
+     * @param height la hauteur de la grille en cellules
+     * @param maxStateCellColor la couleur d'une cellule d'état maximal
+     * @param deadCellColor la couleur d'une cellule morte
+     * @param bgColor la couleur du fond de la simulation
+     */
     public ConwayBoard(GUISimulator gui, HashSet<Point2D.Double> starter, int cellSize, int width, int height, Color maxStateCellColor, Color deadCellColor, Color bgColor){
         super(width, height, starter);
         this.gui = gui;
@@ -29,6 +40,9 @@ class ConwayBoard extends Board implements Simulable {
         draw();
     }
 
+    /**
+     * Dessine la grille sur l'interface graphique
+     */
     public void draw(){
         Color cellColor;
         for (int x = 0; x < getWidth(); x++){
@@ -45,12 +59,18 @@ class ConwayBoard extends Board implements Simulable {
         }
     }
 
+    /**
+     * Dessine l'état suivant sur l'interface graphique
+     */
     public void next(){
         nextGenConway();
         gui.reset();
         draw();
     }
 
+    /**
+     * Dessine l'état initial sur l'interface graphique
+     */
     public void restart(){
         setCellBoard(starter);
         gui.reset();

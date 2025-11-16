@@ -14,8 +14,8 @@ public class Board {
 
     /**
      * Constructeur utiliser pour la variante de l'immigration
-     * @param width la largeur de la grille
-     * @param height la hauteur de la grille
+     * @param width la largeur de la grille en cellules
+     * @param height la hauteur de la grille en cellules
      * @param aliveCells map des états des cellules vivantes : clés = coords, valeurs = états
      * @param maxState l'état maximal des cellules
      */
@@ -28,8 +28,8 @@ public class Board {
 
     /**
      * Constructeur utilisé par la variante de la ségrégation
-     * @param width la largeur de la grille
-     * @param height la hauteur de la grille
+     * @param width la largeur de la grille en cellules
+     * @param height la hauteur de la grille en cellules
      * @param aliveCells map des états des cellules vivantes : clés = coords, valeurs = états
      * @param maxState l'état maximal des cellules
      * @param segSeuil le seuil de ségrégation
@@ -43,8 +43,8 @@ public class Board {
 
     /**
      * Constructeur utilisé par le jeu de la vie
-     * @param width la largeur de la grille
-     * @param height la hauteur de la grille
+     * @param width la largeur de la grille en cellules
+     * @param height la hauteur de la grille en cellules
      * @param aliveCells ensemble des cellules vivantes
      */
     public Board(int width, int height, HashSet<Point2D.Double> aliveCells){

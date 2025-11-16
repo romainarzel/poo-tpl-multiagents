@@ -16,6 +16,18 @@ class ImmigrationBoard extends Board implements Simulable {
     private final HashMap<Point2D.Double, Integer> starter;
     private final int maxState;
 
+    /**
+     * Constructeur d'une grille de la variante de l'immigration
+     * @param gui l'interface graphique
+     * @param starter l'ensemble des cellules vivantes
+     * @param maxState l'état maximal des cellules
+     * @param cellSize la longueur d'un côté d'une cellule
+     * @param width la largeur de la grille en cellules
+     * @param height la hauteur de la grille en cellules
+     * @param maxStateCellColor la couleur d'une cellule d'état maximal
+     * @param deadCellColor la couleur d'une cellule morte
+     * @param bgColor la couleur du fond de la simulation
+     */
     public ImmigrationBoard(GUISimulator gui, HashMap<Point2D.Double, Integer> starter, int maxState, int cellSize, int width, int height, Color maxStateCellColor, Color deadCellColor, Color bgColor){
         super(width, height, starter, maxState);
         this.gui = gui;
@@ -31,6 +43,9 @@ class ImmigrationBoard extends Board implements Simulable {
         draw();
     }
 
+    /**
+     * Dessine la grille sur l'interface graphique
+     */
     public void draw(){
         gui.reset();
 
@@ -49,11 +64,17 @@ class ImmigrationBoard extends Board implements Simulable {
         }
     }
 
+    /**
+     * Dessine l'état suivant sur l'interface graphique
+     */
     public void next(){
         nextGenImmigration();
         draw();
     }
 
+    /**
+     * Dessine l'état initial sur l'interface graphique
+     */
     public void restart(){
         setCellBoard(starter, maxState);
         draw();

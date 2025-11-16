@@ -18,6 +18,20 @@ class SegBoard extends Board implements Simulable {
     private final int maxState;
     private final int segSeuil;
 
+    /**
+     * Constructeur d'une grille du jeu de la vie de Conway
+     * @param gui l'interface graphique
+     * @param starter l'ensemble des cellules vivantes
+     * @param maxState l'état maximal des cellules
+     * @param segSeuil le seuil de ségrégation
+     * @param cellSize la longueur d'un côté d'une cellule
+     * @param width la largeur de la grille en cellules
+     * @param height la hauteur de la grille en cellules
+     * @param minStateCellColor la couleur d'une cellule d'état minimal non morte
+     * @param maxStateCellColor la couleur d'une cellule d'état maximal
+     * @param deadCellColor la couleur d'une cellule morte
+     * @param bgColor la couleur du fond de la simulation
+     */
     public SegBoard(GUISimulator gui, HashMap<Point2D.Double, Integer> starter, int maxState, int segSeuil, int cellSize, int width, int height,Color minStateCellColor, Color maxStateCellColor, Color deadCellColor, Color bgColor){
         super(width, height, starter, maxState, segSeuil);
         this.gui = gui;
@@ -35,6 +49,9 @@ class SegBoard extends Board implements Simulable {
         draw();
     }
 
+    /**
+     * Dessine la grille sur l'interface graphique
+     */
     public void draw(){
         gui.reset();
 
@@ -57,11 +74,17 @@ class SegBoard extends Board implements Simulable {
         }
     }
 
+    /**
+     * Dessine l'état suivant sur l'interface graphique
+     */
     public void next(){
         nextGenSeg();
         draw();
     }
 
+    /**
+     * Dessine l'état initial sur l'interface graphique
+     */
     public void restart(){
         setCellBoard(starter, maxState, segSeuil);
         draw();
