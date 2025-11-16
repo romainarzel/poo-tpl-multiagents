@@ -45,7 +45,7 @@ class SegBoard extends Board implements Simulable {
                 if (getPercent(lig, col) == 0){
                     cellColor = deadCellColor;
                 } else {
-                    cellColor = linearColorGradient(minStateCellColor, maxStateCellColor, getPercent(lig, col));
+                    cellColor = linearColorGradient(minStateCellColor, maxStateCellColor, (float) getPercent(lig, col) / 100);
                 }
 
                 gui.addGraphicalElement(new gui.Rectangle(
@@ -55,21 +55,6 @@ class SegBoard extends Board implements Simulable {
 
             }
         }
-    }
-
-    private Color linearColorGradient(Color c1, Color c2, float percent){
-        if (percent > 100 || percent < 0){
-            throw new IllegalArgumentException("percentage is out of range");
-        }
-
-        int r1 = c1.getRed(); int g1 = c1.getGreen(); int b1 = c1.getBlue();
-        int r2 = c2.getRed(); int g2 = c2.getGreen(); int b2 = c2.getBlue();
-
-        int newRed = (int)(r1 + percent * (r2 - r1));
-        int newGreen = (int)(g1 + percent * (g2 - g1));
-        int newBlue = (int)(b1 + percent * (b2 - b1));
-
-        return new Color(newRed, newGreen, newBlue);
     }
 
     public void next(){

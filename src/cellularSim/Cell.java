@@ -89,9 +89,9 @@ public class Cell {
      * @param nbAliveNeighbours le nombre de voisins vivants
      */
     public void newGenConway(int nbAliveNeighbours){
-        if (isAlive() && nbAliveNeighbours != 2 && nbAliveNeighbours != 3){
+        if (nbAliveNeighbours != 2 && nbAliveNeighbours != 3){
             state = 0;
-        } else if (!isAlive() && nbAliveNeighbours == 3){
+        } else if (nbAliveNeighbours == 3){
             state = 1;
         }
     }
