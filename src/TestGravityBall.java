@@ -13,13 +13,13 @@ public class TestGravityBall {
 }
 
 class GravityBall extends Point implements Simulable{
-    private GUISimulator gui;
-    private Color ballColor;
-    private int ballRadius;
-    private double ballBounce;
+    private final GUISimulator gui;
+    private final Color ballColor;
+    private final int ballRadius;
+    private final double ballBounce;
+    private final int gravityStrength;
     private int xVelocity;
     private int yVelocity;
-    private int gravityStrength;
 
     public GravityBall(GUISimulator gui, Color ballColor, int ballRadius, double ballBounce, int gravityStrength){
         this.gui = gui;
@@ -56,17 +56,18 @@ class GravityBall extends Point implements Simulable{
     public void next(){
 
         int nextX = this.x + this.xVelocity / 10;
-        if (nextX < 0| nextX > this.gui.getPanelWidth()){
+        if (nextX < 0| nextX > this.gui.getPanelWidth()){ // Verification si colision avec bord verticaux
             this.addVelocity((int) (-2 * this.xVelocity * this.ballBounce), 0);
         }
 
         int nextY = this.y - this.yVelocity / 10;
-        if (nextY < 0 | nextY > this.gui.getPanelHeight()){
+        if (nextY < 0 | nextY > this.gui.getPanelHeight()){ // Verification si colision avec bords horizontaux
             this.addVelocity(0, (int) (-2 * this.yVelocity * this.ballBounce));
         } else {
-            this.addVelocity(0, -this.gravityStrength);
+            this.addVelocity(0, -this.gravityStrength); // Ajout accélération gravité
         }
 
+        // Si la vitesse est trop faible on arrête la balle pour éviter les mouvements parasites
         if (Math.abs(this.xVelocity) < 5){
             this.xVelocity = 0;
         }
