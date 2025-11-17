@@ -84,44 +84,44 @@ Contient le programme principal pour lancer une simulation graphique du modèle 
 
 
 
-   **Boids**
+   **Boids (SwarmSim)**
 
 Contient la représentation graphique d’un boid dans une simulation d’essaim. La classe gère la position, la direction et la vitesse de chaque boid, calcule le comportement collectif selon les règles de cohésion, alignement, séparation et évitement des murs, et dessine chaque boid sous forme de triangle orienté.
 
-   **Element**
+   **Element (SwarmSim)**
 
 Contient les propriétés physiques de base d’un agent de simulation, telles que la position, la vitesse, l’accélération et la direction. Sert de classe de base pour les boids.
 
-   **Event**
+   **Event (SwarmSim)**
 
 Contient la structure d’un événement discret planifié dans le temps. Chaque événement possède une date d’exécution et doit implémenter la méthode execute(). Comparable par date pour être utilisé dans un gestionnaire d’événements.
 
-   **EventManager**
+   **EventManager (SwarmSim)**
 
 Contient le gestionnaire d’événements discrets pour la simulation. Il maintient la date courante, exécute les événements programmés à chaque tick, et permet de réinitialiser ou d’ajouter de nouveaux événements.
 
-   **PredatorBoid**
+   **PredatorBoid (SwarmSim)**
 
 Contient un boid prédateur qui hérite de Boids et ajoute la capacité de chasser des cibles. Il ajuste sa direction et sa vitesse pour poursuivre le boid le plus proche parmi ses cibles, tout en appliquant les règles classiques d’un boid pour le mouvement.
 
-   **PredatorSwarm**
+   **PredatorSwarm (SwarmSim)**
 
 Contient un groupe de prédateurs. Hérite de Swarm et initialise une liste de PredatorBoid avec des positions et vitesses aléatoires pour la simulation.
 
-   **Swarm**
+   **Swarm (SwarmSim)**
 
 Contient un groupe de boids et gère leur évolution collective. Calcule et applique la prochaine génération pour tous les boids, permet la réinitialisation du groupe, et fournit une méthode pour créer des boids aléatoires.
 
-   **SwarmBoard**
+   **SwarmBoard (SwarmSim)**
 
 Contient le wrapper graphique pour GUISimulator d’un groupe de boids. Initialise et dessine les boids, met à jour leur position et leur orientation à chaque tick, et permet la réinitialisation complète du groupe.
 
-   **SwarmSim**
+   **SwarmSim (SwarmSim)**
 
 Contient le point d’entrée de la simulation Swarm. Crée la fenêtre graphique GUISimulator et initialise le simulateur SwarmSimulator avec un nombre défini de boids.
 
-   **SwarmSimulator**
-   
+   **SwarmSimulator (SwarmSim)**
+
 Contient la gestion complète de la simulation de groupes de boids avec événements discrets. Coordonne un groupe de sardines et un groupe de prédateurs, planifie leurs mises à jour via EventManager, met à jour la position de tous les boids, et gère le dessin et la réinitialisation de la simulation.
 
 
