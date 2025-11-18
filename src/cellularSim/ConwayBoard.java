@@ -15,6 +15,8 @@ class ConwayBoard extends Board implements Simulable {
     private final Color bgColor;
     private final HashSet<Point2D.Double> starter;
 
+    private final EventManager manager = new EventManager();
+
     /**
      * Constructeur d'une grille du jeu de la vie de Conway
      * @param gui l'interface graphique
@@ -37,6 +39,8 @@ class ConwayBoard extends Board implements Simulable {
         this.deadCellColor = deadCellColor;
         this.bgColor = bgColor;
 
+        manager.addEvent(new ConwayStep(manager.getCurrentDate() + 1));
+
         draw();
     }
 
@@ -44,6 +48,8 @@ class ConwayBoard extends Board implements Simulable {
      * Dessine la grille sur l'interface graphique
      */
     public void draw(){
+        gui.reset();
+
         Color cellColor;
         for (int x = 0; x < getWidth(); x++){
 
@@ -63,17 +69,32 @@ class ConwayBoard extends Board implements Simulable {
      * Dessine l'état suivant sur l'interface graphique
      */
     public void next(){
-        nextGenConway();
-        gui.reset();
-        draw();
+        manager.next();
     }
 
     /**
      * Dessine l'état initial sur l'interface graphique
      */
     public void restart(){
+        manager.restart();
         setCellBoard(starter);
-        gui.reset();
         draw();
+    }
+
+    /**
+     * Calculate the next step of the simulation and register it to the event manager
+     */
+    private class ConwayStep extends Event{
+        public ConwayStep(long date){
+            super(date);
+        }
+
+        @Override
+        public void execute(){
+            nextGenConway();
+            draw();
+
+            manager.addEvent(new ConwayStep(getDate() + 1));
+        }
     }
 }

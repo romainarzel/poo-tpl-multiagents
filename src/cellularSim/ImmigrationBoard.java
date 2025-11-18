@@ -16,6 +16,8 @@ class ImmigrationBoard extends Board implements Simulable {
     private final HashMap<Point2D.Double, Integer> starter;
     private final int maxState;
 
+    private final EventManager manager = new EventManager();
+
     /**
      * Constructeur d'une grille de la variante de l'immigration
      * @param gui l'interface graphique
@@ -39,6 +41,8 @@ class ImmigrationBoard extends Board implements Simulable {
         this.maxStateCellColor = maxStateCellColor;
         this.deadCellColor = deadCellColor;
         this.bgColor = bgColor;
+
+        manager.addEvent(new ImmigrationStep(manager.getCurrentDate() + 1));
 
         draw();
     }
@@ -68,15 +72,33 @@ class ImmigrationBoard extends Board implements Simulable {
      * Dessine l'état suivant sur l'interface graphique
      */
     public void next(){
-        nextGenImmigration();
-        draw();
+        manager.next();
     }
 
     /**
      * Dessine l'état initial sur l'interface graphique
      */
     public void restart(){
+        manager.restart();
+
         setCellBoard(starter, maxState);
         draw();
+    }
+
+    /**
+     * Calculate the next step of the simulation and register it to the event manager
+     */
+    private class ImmigrationStep extends Event{
+        public ImmigrationStep(long date){
+            super(date);
+        }
+
+        @Override
+        public void execute(){
+            nextGenImmigration();
+            draw();
+
+            manager.addEvent(new ImmigrationStep(manager.getCurrentDate() + 1));
+        }
     }
 }
