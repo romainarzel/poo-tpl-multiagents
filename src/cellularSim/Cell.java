@@ -3,7 +3,7 @@ package cellularSim;
 public class Cell {
     private final int maxState;
     private int state;
-    private final int segSeuil; // Needed for the segregation variant
+    private final int segSeuil; // Le seuil de ségrégation pour la variante de la ségrégation
 
     /**
      * Constructuer pour une situation vierge
