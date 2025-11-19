@@ -9,8 +9,8 @@ import java.util.Random;
 
 public class Board {
     private ArrayList<ArrayList<Cell>> cellBoard;
-    private final int width;
-    private final int height;
+    private int width;
+    private int height;
 
     /**
      * Constructeur utiliser pour la variante de l'immigration
@@ -20,9 +20,7 @@ public class Board {
      * @param maxState l'état maximal des cellules
      */
     public Board(int width, int height, HashMap<Point2D.Double, Integer> aliveCells, int maxState){
-        this.width = width;
-        this.height = height;
-
+        setSize(width, height);
         setCellBoard(aliveCells, maxState);
     }
 
@@ -35,9 +33,7 @@ public class Board {
      * @param segSeuil le seuil de ségrégation
      */
     public Board(int width, int height, HashMap<Point2D.Double, Integer> aliveCells, int maxState, int segSeuil){
-        this.width = width;
-        this.height = height;
-
+        setSize(width, height);
         setCellBoard(aliveCells, maxState, segSeuil);
     }
 
@@ -48,9 +44,25 @@ public class Board {
      * @param aliveCells ensemble des cellules vivantes
      */
     public Board(int width, int height, HashSet<Point2D.Double> aliveCells){
+        setSize(width, height);
+        setCellBoard(aliveCells);
+    }
+
+    /**
+     * Modifieur vérifiant les paramètres de taille de la grille
+     * @param width la largeur de la grille
+     * @param height la hauteur de la grille
+     */
+    private void setSize(int width, int height){
+        if (width <= 0){
+            throw new IllegalArgumentException("Width has to be strictly positive !");
+        }
+        if (height <= 0){
+            throw new IllegalArgumentException("Height has to be strictly positive !");
+        }
+
         this.width = width;
         this.height = height;
-        setCellBoard(aliveCells);
     }
 
     /**

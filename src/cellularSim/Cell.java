@@ -1,7 +1,7 @@
 package cellularSim;
 
 public class Cell {
-    private final int maxState;
+    private int maxState;
     private int state;
     private final int segSeuil; // Le seuil de ségrégation pour la variante de la ségrégation
 
@@ -9,8 +9,8 @@ public class Cell {
      * Constructuer pour une situation vierge
      */
     public Cell(){
-        state = 0;
-        maxState = 1;
+        setMaxState(1);
+        setState(0);
         segSeuil = 0;
     }
 
@@ -19,8 +19,8 @@ public class Cell {
      * @param state l'état initial de la cellule
      */
     public Cell(int state){
-        this.state = state;
-        maxState = 1;
+        setMaxState(maxState);
+        setState(state);
         segSeuil = 0;
     }
 
@@ -30,9 +30,9 @@ public class Cell {
      * @param maxState l'état maximal de la cellule --FINAL--
      */
     public Cell(int state, int maxState){
-        this.maxState = maxState;
-        segSeuil = 0;
+        setMaxState(maxState);
         setState(state);
+        segSeuil = 0;
     }
 
     /**
@@ -42,9 +42,9 @@ public class Cell {
      * @param segSeuil le seuil au-dela duquel le cellule cherche à déménager
      */
     public Cell(int state, int maxState, int segSeuil){
-        this.maxState = maxState;
-        this.segSeuil = segSeuil;
+        setMaxState(maxState);
         setState(state);
+        this.segSeuil = segSeuil;
     }
 
     /**
@@ -53,6 +53,14 @@ public class Cell {
      */
     private void setState(int state){
         this.state = state % (maxState + 1);
+    }
+
+    private void setMaxState(int maxState){
+        if (maxState <= 0){
+            throw new IllegalArgumentException("maxState has to be strictly positive !");
+        }
+
+        this.maxState = maxState;
     }
 
     /**

@@ -38,7 +38,7 @@ class ImmigrationBoard extends Board implements Simulable {
         this.starter = starter;
         this.maxState = maxState;
 
-        manager.addEvent(new ImmigrationStep(manager.getCurrentDate() + 1));
+        manager.addEvent(new Step(manager.getCurrentDate() + 1));
 
         draw();
     }
@@ -76,7 +76,6 @@ class ImmigrationBoard extends Board implements Simulable {
      */
     public void restart(){
         manager.restart();
-
         setCellBoard(starter, maxState);
         draw();
     }
@@ -84,8 +83,8 @@ class ImmigrationBoard extends Board implements Simulable {
     /**
      * Calculate the next step of the simulation and register it to the event manager
      */
-    private class ImmigrationStep extends Event{
-        public ImmigrationStep(long date){
+    private class Step extends Event{
+        public Step(long date){
             super(date);
         }
 
@@ -94,7 +93,7 @@ class ImmigrationBoard extends Board implements Simulable {
             nextGenImmigration();
             draw();
 
-            manager.addEvent(new ImmigrationStep(manager.getCurrentDate() + 1));
+            manager.addEvent(new Step(manager.getCurrentDate() + 1));
         }
     }
 }

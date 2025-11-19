@@ -84,7 +84,6 @@ class SegBoard extends Board implements Simulable {
      */
     public void restart(){
         manager.restart();
-
         setCellBoard(starter, maxState, segSeuil);
         draw();
     }
