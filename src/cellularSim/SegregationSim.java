@@ -29,6 +29,6 @@ public class SegregationSim {
             }
         }
 
-        SegBoard game = new SegBoard(gui, aliveCells, maxState, segSeuil, 10, width, height, Color.RED, Color.BLUE, Color.BLACK, Color.LIGHT_GRAY);
+        SegBoard game = new SegBoard(gui, aliveCells, maxState, segSeuil, width, height);
     }
 }

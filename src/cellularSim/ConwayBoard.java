@@ -8,39 +8,34 @@ import java.awt.geom.Point2D;
 import java.util.HashSet;
 
 class ConwayBoard extends Board implements Simulable {
+
+    // Attributs
     private final GUISimulator gui;
-    private final int cellSize;
-    private final Color maxStateCellColor;
-    private final Color deadCellColor;
-    private final Color bgColor;
     private final HashSet<Point2D.Double> starter;
 
+    // Caractéristiques des cellules
+    private static final int cellSize = 10;
+    private static final Color maxStateCellColor = Color.WHITE;
+    private static final Color deadCellColor = Color.BLACK;
+    private static final Color bgColor = Color.LIGHT_GRAY;
+
+    // Event manager
     private final EventManager manager = new EventManager();
 
     /**
      * Constructeur d'une grille du jeu de la vie de Conway
      * @param gui l'interface graphique
      * @param starter l'ensemble des cellules vivantes
-     * @param cellSize la longueur d'un côté d'une cellule
      * @param width la largeur de la grille en cellules
      * @param height la hauteur de la grille en cellules
-     * @param maxStateCellColor la couleur d'une cellule d'état maximal
-     * @param deadCellColor la couleur d'une cellule morte
-     * @param bgColor la couleur du fond de la simulation
      */
-    public ConwayBoard(GUISimulator gui, HashSet<Point2D.Double> starter, int cellSize, int width, int height, Color maxStateCellColor, Color deadCellColor, Color bgColor){
+    public ConwayBoard(GUISimulator gui, HashSet<Point2D.Double> starter, int width, int height){
         super(width, height, starter);
         this.gui = gui;
         gui.setSimulable(this);
-
-        this.cellSize = cellSize;
         this.starter = starter;
-        this.maxStateCellColor = maxStateCellColor;
-        this.deadCellColor = deadCellColor;
-        this.bgColor = bgColor;
 
         manager.addEvent(new ConwayStep(manager.getCurrentDate() + 1));
-
         draw();
     }
 

@@ -62,7 +62,7 @@ public class Board {
      * @param percent le pourcentage de l'état de la cellule
      * @return la couleur de la cellule
      */
-    protected Color linearColorGradient(Color c1, Color c2, float percent){
+    protected static Color linearColorGradient(Color c1, Color c2, float percent){
         if (percent > 100 | percent < 0){
             throw new IllegalArgumentException("percentage is out of range");
         }

@@ -8,16 +8,21 @@ import java.awt.geom.Point2D;
 import java.util.HashMap;
 
 class SegBoard extends Board implements Simulable {
+
+    // Attributs
     private final GUISimulator gui;
-    private final int cellSize;
-    private final Color minStateCellColor;
-    private final Color maxStateCellColor;
-    private final Color deadCellColor;
-    private final Color bgColor;
     private final HashMap<Point2D.Double, Integer> starter;
     private final int maxState;
     private final int segSeuil;
 
+    // Caractéristiques des cellules
+    private static final int cellSize = 10;
+    private static final Color minStateCellColor = Color.RED;
+    private static final Color maxStateCellColor = Color.BLUE;
+    private static final Color deadCellColor = Color.BLACK;
+    private static final Color bgColor = Color.LIGHT_GRAY;
+
+    // Event manager
     private final EventManager manager = new EventManager();
 
     /**
@@ -26,27 +31,16 @@ class SegBoard extends Board implements Simulable {
      * @param starter l'ensemble des cellules vivantes
      * @param maxState l'état maximal des cellules
      * @param segSeuil le seuil de ségrégation
-     * @param cellSize la longueur d'un côté d'une cellule
      * @param width la largeur de la grille en cellules
      * @param height la hauteur de la grille en cellules
-     * @param minStateCellColor la couleur d'une cellule d'état minimal non morte
-     * @param maxStateCellColor la couleur d'une cellule d'état maximal
-     * @param deadCellColor la couleur d'une cellule morte
-     * @param bgColor la couleur du fond de la simulation
      */
-    public SegBoard(GUISimulator gui, HashMap<Point2D.Double, Integer> starter, int maxState, int segSeuil, int cellSize, int width, int height,Color minStateCellColor, Color maxStateCellColor, Color deadCellColor, Color bgColor){
+    public SegBoard(GUISimulator gui, HashMap<Point2D.Double, Integer> starter, int maxState, int segSeuil, int width, int height){
         super(width, height, starter, maxState, segSeuil);
         this.gui = gui;
         gui.setSimulable(this);
-
-        this.cellSize = cellSize;
         this.starter = starter;
         this.maxState = maxState;
         this.segSeuil = segSeuil;
-        this.maxStateCellColor = maxStateCellColor;
-        this.minStateCellColor = minStateCellColor;
-        this.deadCellColor = deadCellColor;
-        this.bgColor = bgColor;
 
         manager.addEvent(new SegStep(manager.getCurrentDate() + 1));
 

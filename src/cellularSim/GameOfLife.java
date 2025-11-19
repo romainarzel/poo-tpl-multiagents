@@ -42,6 +42,6 @@ public class GameOfLife {
             }
         }
 
-        ConwayBoard game = new ConwayBoard(gui, aliveCells, 10, width, height, Color.WHITE, Color.BLACK, Color.LIGHT_GRAY);
+        ConwayBoard game = new ConwayBoard(gui, aliveCells, width, height);
     }
 }

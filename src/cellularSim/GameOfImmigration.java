@@ -52,6 +52,6 @@ public class GameOfImmigration {
             }
         }
 
-        ImmigrationBoard game = new ImmigrationBoard(gui, aliveCells, maxState, 10, width, height, Color.WHITE, Color.BLACK, Color.LIGHT_GRAY);
+        ImmigrationBoard game = new ImmigrationBoard(gui, aliveCells, maxState, width, height);
     }
 }
