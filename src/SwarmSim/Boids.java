@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -64,7 +64,7 @@ public class Boids extends Element implements GraphicalElement {
     public void updateBoids(List<Boids> all) {
 
         // ---- Collect neighbors ----
-        List<Boids> neighbors = new ArrayList<>();
+        List<Boids> neighbors = new LinkedList<>();
         for (Boids b : all) {
             if (b == this) continue;
             if (this.distance(b) < NEIGHBOR_RADIUS) {
