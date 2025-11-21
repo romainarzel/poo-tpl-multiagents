@@ -127,7 +127,114 @@ Contient la gestion complète de la simulation de groupes de boids avec événem
 
 
 
+# Documentation Javadoc
 
+## Génération de la documentation
+
+Le projet dispose d'une documentation Javadoc complète pour tous les packages et classes. Pour générer la documentation HTML :
+
+```bash
+make javadoc
+```
+
+Cette commande :
+- Génère la documentation dans le répertoire `doc/javadoc/`
+- Ouvre automatiquement la documentation dans votre navigateur par défaut
+- Affiche un message de confirmation une fois terminée
+
+## Consultation de la documentation
+
+### Ouverture automatique
+La documentation s'ouvre automatiquement dans votre navigateur favori après génération.
+
+### Ouverture manuelle
+Si vous souhaitez consulter la documentation ultérieurement :
+
+```bash
+xdg-open doc/javadoc/index.html
+```
+
+Ou naviguez directement vers :
+```
+doc/javadoc/index.html
+```
+
+**⚠️ Important** : Ne pas confondre avec `doc/index.html` qui contient la documentation de la bibliothèque GUI.
+
+## Contenu de la documentation
+
+La Javadoc couvre l'ensemble du projet (23 fichiers Java) répartis en deux packages principaux :
+
+### Package `cellularSim` - Automates Cellulaires
+
+Documentation complète des simulations d'automates cellulaires :
+
+- **Classes principales** :
+  - `Board` : Gestionnaire de grille avec topologie toroïdale
+  - `Cell` : Logique d'état et règles d'évolution
+  - `ConwayBoard` : Jeu de la vie de Conway avec règles détaillées
+  - `ImmigrationBoard` : Variante de l'immigration multi-états
+  - `SegBoard` : Modèle de ségrégation de Schelling
+
+- **Infrastructure** :
+  - `Event` : Système d'événements discrets
+  - `EventManager` : Gestionnaire de simulation événementielle
+
+- **Programmes principaux** :
+  - `GameOfLife` : Point d'entrée du jeu de la vie
+  - `GameOfImmigration` : Point d'entrée de l'immigration
+  - `SegregationSim` : Point d'entrée de la ségrégation
+
+### Package `SwarmSim` - Simulation d'Essaims
+
+Documentation de l'algorithme des boids et des comportements collectifs :
+
+- **Algorithme des boids** :
+  - `Boids` : Implémentation complète avec les trois règles fondamentales
+    - Séparation : évitement des collisions
+    - Alignement : synchronisation de direction
+    - Cohésion : regroupement collectif
+  - `Element` : Classe de base pour agents mobiles
+
+- **Comportements avancés** :
+  - `PredatorBoid` : Système de prédation avec poursuite
+  - `PredatorSwarm` : Gestion d'essaims de prédateurs
+  - `Swarm` : Gestion d'essaims de proies
+
+- **Infrastructure graphique** :
+  - `SwarmBoard` : Wrapper graphique pour l'affichage
+  - `SwarmSimulator` : Simulateur avec interactions prédateurs-proies
+  - `SwarmSim` : Programme principal
+
+## Caractéristiques de la documentation
+
+- **Langue** : Documentation entièrement en français
+- **Format** : HTML navigable avec recherche intégrée
+- **Liens croisés** : Navigation entre classes via tags `@see` et `{@link}`
+- **Détails techniques** :
+  - Description des algorithmes (boids, règles cellulaires)
+  - Paramètres de configuration documentés
+  - Exemples d'utilisation
+  - Patterns de conception expliqués (double-buffering, événements discrets)
+
+## Structure de la documentation générée
+
+```
+doc/javadoc/
+├── index.html              # Page d'accueil
+├── allclasses-index.html   # Index de toutes les classes
+├── index-all.html          # Index complet
+├── cellularSim/            # Package automates cellulaires
+│   ├── Board.html
+│   ├── Cell.html
+│   ├── ConwayBoard.html
+│   └── ...
+└── SwarmSim/               # Package simulations d'essaims
+    ├── Boids.html
+    ├── Element.html
+    ├── PredatorBoid.html
+    └── ...
+```
 
 
 
@@ -164,3 +271,5 @@ Mais vu la taille de ce projet, il est ***très fortement recommandé d'utiliser
 - s'il ne trouve pas la librairie, vous devez alors créer un vrai "projet" et configurer l'import du .jar.
 - pas vraiment d'aide pour ça, vous trouverez
 - vous pouvez bien sûr utiliser git via l'interface de VS code
+
+
