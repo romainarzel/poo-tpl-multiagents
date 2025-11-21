@@ -6,3 +6,9 @@ bin/
 .idea/
 out/ 
 poo_tpl_multiagents.iml
+
+#some file created by vscode
+.vscode/
+
+#doc de javadoc
+doc/javadoc/
