@@ -7,6 +7,41 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 
+/**
+ * Implémentation graphique du modèle de ségrégation de Schelling.
+ * 
+ * \u003cp\u003e
+ * Cette classe étend {@link Board} et implémente {@link Simulable} pour simuler
+ * le célèbre modèle de Thomas Schelling qui démontre comment des préférences
+ * individuelles modérées peuvent conduire à une ségrégation collective
+ * importante.
+ * \u003c/p\u003e
+ * 
+ * \u003cp\u003e
+ * La règle de ségrégation :
+ * \u003cul\u003e
+ * \u003cli\u003eUne cellule d'état n avec plus de segSeuil voisins d'états
+ * différents
+ * "déménage" vers une cellule voisine morte aléatoire\u003c/li\u003e
+ * \u003cli\u003eLa cellule originale meurt et une cellule adjacente naît avec
+ * le même état\u003c/li\u003e
+ * \u003cli\u003eCela modélise le comportement où les agents préfèrent être
+ * entourés
+ * d'agents similaires\u003c/li\u003e
+ * \u003c/ul\u003e
+ * \u003c/p\u003e
+ * 
+ * \u003cp\u003e
+ * L'affichage utilise un dégradé de couleurs entre rouge (état 1) et bleu (état
+ * maximal)
+ * pour visualiser les différentes populations, avec le noir pour les cellules
+ * mortes.
+ * \u003c/p\u003e
+ * 
+ * @see Board
+ * @see Cell
+ * @see EventManager
+ */
 class SegBoard extends Board implements Simulable {
 
     // Attributs
@@ -27,14 +62,16 @@ class SegBoard extends Board implements Simulable {
 
     /**
      * Constructeur d'une grille du jeu de la vie de Conway
-     * @param gui l'interface graphique
-     * @param starter l'ensemble des cellules vivantes
+     * 
+     * @param gui      l'interface graphique
+     * @param starter  l'ensemble des cellules vivantes
      * @param maxState l'état maximal des cellules
      * @param segSeuil le seuil de ségrégation
-     * @param width la largeur de la grille en cellules
-     * @param height la hauteur de la grille en cellules
+     * @param width    la largeur de la grille en cellules
+     * @param height   la hauteur de la grille en cellules
      */
-    public SegBoard(GUISimulator gui, HashMap<Point2D.Double, Integer> starter, int maxState, int segSeuil, int width, int height){
+    public SegBoard(GUISimulator gui, HashMap<Point2D.Double, Integer> starter, int maxState, int segSeuil, int width,
+            int height) {
         super(width, height, starter, maxState, segSeuil);
         this.gui = gui;
         gui.setSimulable(this);
@@ -50,17 +87,18 @@ class SegBoard extends Board implements Simulable {
     /**
      * Dessine la grille sur l'interface graphique
      */
-    public void draw(){
+    public void draw() {
         gui.reset();
 
         Color cellColor;
-        for (int col = 0; col < getWidth(); col++){
+        for (int col = 0; col < getWidth(); col++) {
 
-            for (int lig = 0; lig < getHeight(); lig++){
-                if (getPercent(lig, col) == 0){
+            for (int lig = 0; lig < getHeight(); lig++) {
+                if (getPercent(lig, col) == 0) {
                     cellColor = deadCellColor;
                 } else {
-                    cellColor = linearColorGradient(minStateCellColor, maxStateCellColor, (float) getPercent(lig, col) / 100);
+                    cellColor = linearColorGradient(minStateCellColor, maxStateCellColor,
+                            (float) getPercent(lig, col) / 100);
                 }
 
                 gui.addGraphicalElement(new gui.Rectangle(
@@ -75,26 +113,26 @@ class SegBoard extends Board implements Simulable {
     /**
      * Dessine l'état suivant sur l'interface graphique
      */
-    public void next(){
+    public void next() {
         manager.next();
     }
 
     /**
      * Dessine l'état initial sur l'interface graphique
      */
-    public void restart(){
+    public void restart() {
         manager.restart();
         setCellBoard(starter, maxState, segSeuil);
         draw();
     }
 
-    private class SegStep extends Event{
-        public SegStep(long date){
+    private class SegStep extends Event {
+        public SegStep(long date) {
             super(date);
         }
 
         @Override
-        public void execute(){
+        public void execute() {
             nextGenSeg();
             draw();
 

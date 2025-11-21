@@ -7,8 +7,47 @@ import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Random;
 
+/**
+ * Classe principale pour lancer une simulation de la variante de l'immigration.
+ * 
+ * <p>
+ * Cette classe contient la méthode {@code main} qui initialise et démarre une
+ * simulation graphique de la variante de l'immigration du jeu de la vie, où les
+ * cellules peuvent avoir plusieurs états (au lieu de simplement mort/vivant).
+ * </p>
+ * 
+ * <p>
+ * Le programme propose deux configurations initiales :
+ * <ul>
+ * <li>Un exemple prédéfini du sujet (commenté)</li>
+ * <li>Une grille aléatoire avec des cellules d'états variés (configuration par
+ * défaut)</li>
+ * </ul>
+ * </p>
+ * 
+ * <p>
+ * La simulation utilise par défaut maxState = 3, permettant 4 états différents
+ * (0 à 3).
+ * Les vagues de couleurs se propagent à travers la grille selon les règles de
+ * l'immigration.
+ * </p>
+ * 
+ * @see ImmigrationBoard
+ * @see Board
+ */
 public class GameOfImmigration {
-    public static void main(String[] args){
+    /**
+     * Lance la simulation de la variante de l'immigration.
+     * 
+     * <p>
+     * Initialise une grille 50x50 avec des cellules d'états aléatoires (0 à
+     * maxState),
+     * crée une fenêtre graphique, et démarre la simulation interactive.
+     * </p>
+     * 
+     * @param args arguments de ligne de commande (non utilisés)
+     */
+    public static void main(String[] args) {
         GUISimulator gui = new GUISimulator(600, 600, Color.BLACK);
 
         int width = 50;
@@ -19,35 +58,37 @@ public class GameOfImmigration {
         Random rng = new Random();
 
         // Generates an example grid from the pdf given
-        /*aliveCells.put(new Point2D.Double(10, 10), 3);
-        aliveCells.put(new Point2D.Double(12, 10), 1);
-        aliveCells.put(new Point2D.Double(13, 10), 1);
-
-        aliveCells.put(new Point2D.Double(10, 11), 3);
-        aliveCells.put(new Point2D.Double(11, 11), 1);
-        aliveCells.put(new Point2D.Double(12, 11), 1);
-        aliveCells.put(new Point2D.Double(13, 11), 1);
-        aliveCells.put(new Point2D.Double(14, 11), 2);
-
-        aliveCells.put(new Point2D.Double(10, 12), 1);
-        aliveCells.put(new Point2D.Double(11, 12), 1);
-        aliveCells.put(new Point2D.Double(12, 12), 3);
-        aliveCells.put(new Point2D.Double(13, 12), 2);
-        aliveCells.put(new Point2D.Double(14, 12), 2);
-
-        aliveCells.put(new Point2D.Double(11, 13), 1);
-        aliveCells.put(new Point2D.Double(12, 13), 2);
-        aliveCells.put(new Point2D.Double(13, 13), 2);
-        aliveCells.put(new Point2D.Double(14, 13), 2);
-
-        aliveCells.put(new Point2D.Double(11, 14), 3);
-        aliveCells.put(new Point2D.Double(12, 14), 2);
-        aliveCells.put(new Point2D.Double(13, 14), 2);
-        aliveCells.put(new Point2D.Double(14, 14), 1);*/
+        /*
+         * aliveCells.put(new Point2D.Double(10, 10), 3);
+         * aliveCells.put(new Point2D.Double(12, 10), 1);
+         * aliveCells.put(new Point2D.Double(13, 10), 1);
+         * 
+         * aliveCells.put(new Point2D.Double(10, 11), 3);
+         * aliveCells.put(new Point2D.Double(11, 11), 1);
+         * aliveCells.put(new Point2D.Double(12, 11), 1);
+         * aliveCells.put(new Point2D.Double(13, 11), 1);
+         * aliveCells.put(new Point2D.Double(14, 11), 2);
+         * 
+         * aliveCells.put(new Point2D.Double(10, 12), 1);
+         * aliveCells.put(new Point2D.Double(11, 12), 1);
+         * aliveCells.put(new Point2D.Double(12, 12), 3);
+         * aliveCells.put(new Point2D.Double(13, 12), 2);
+         * aliveCells.put(new Point2D.Double(14, 12), 2);
+         * 
+         * aliveCells.put(new Point2D.Double(11, 13), 1);
+         * aliveCells.put(new Point2D.Double(12, 13), 2);
+         * aliveCells.put(new Point2D.Double(13, 13), 2);
+         * aliveCells.put(new Point2D.Double(14, 13), 2);
+         * 
+         * aliveCells.put(new Point2D.Double(11, 14), 3);
+         * aliveCells.put(new Point2D.Double(12, 14), 2);
+         * aliveCells.put(new Point2D.Double(13, 14), 2);
+         * aliveCells.put(new Point2D.Double(14, 14), 1);
+         */
 
         // Generates a grid of random cell values
-        for (int col = 0; col < width; col++){
-            for (int lig = 0; lig < height; lig++){
+        for (int col = 0; col < width; col++) {
+            for (int lig = 0; lig < height; lig++) {
                 aliveCells.put(new Point2D.Double(col, lig), rng.nextInt(maxState + 1));
             }
         }

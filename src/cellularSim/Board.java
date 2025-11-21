@@ -7,6 +7,38 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 
+/**
+ * Représente et gère une grille bidimensionnelle de cellules pour les simulations d'automates cellulaires.
+ * 
+ * \u003cp\u003e
+ * Cette classe fournit l'infrastructure de base pour différentes variantes d'automates cellulaires :
+ * \u003cul\u003e
+ *   \u003cli\u003eJeu de la vie de Conway\u003c/li\u003e
+ *   \u003cli\u003eVariante de l'immigration\u003c/li\u003e
+ *   \u003cli\u003eModèle de ségrégation de Schelling\u003c/li\u003e
+ * \u003c/ul\u003e
+ * \u003c/p\u003e
+ * 
+ * \u003cp\u003e
+ * La grille utilise une topologie toroïdale (wrap-around) où les bords opposés sont connectés,
+ * créant une surface sans frontière comme un donut.
+ * \u003c/p\u003e
+ * 
+ * \u003cp\u003e
+ * La classe gère :
+ * \u003cul\u003e
+ *   \u003cli\u003eL'initialisation de la grille selon différentes règles\u003c/li\u003e
+ *   \u003cli\u003eLe calcul des voisinages (Moore, 8 voisins)\u003c/li\u003e
+ *   \u003cli\u003eL'évolution de la grille selon les règles spécifiques à chaque variante\u003c/li\u003e
+ *   \u003cli\u003eLa génération de dégradés de couleurs pour l'affichage\u003c/li\u003e
+ * \u003c/ul\u003e
+ * \u003c/p\u003e
+ * 
+ * @see Cell
+ * @see ConwayBoard
+ * @see ImmigrationBoard
+ * @see SegBoard
+ */
 public class Board {
     private ArrayList<ArrayList<Cell>> cellBoard;
     private int width;

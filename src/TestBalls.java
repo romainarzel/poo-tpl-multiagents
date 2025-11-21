@@ -41,8 +41,8 @@ class Balls{
         points = new ArrayList<>();
         dx = new ArrayList<>();
         dy = new ArrayList<>();
-        for (int x = 10; x < 80; x += 50){
-            for (int y = 10; y < 60; y += 50){
+        for (int x = 10; x < 800; x += 50){
+            for (int y = 10; y < 600; y += 50){
                 points.add(new Point(x, y));
                 dx.add(1);
                 dy.add(1);
