@@ -69,5 +69,7 @@ javadoc:
 	mkdir -p doc/javadoc  
 	javadoc -d doc/javadoc -sourcepath src -subpackages cellularSim:SwarmSim -classpath lib/gui.jar -encoding UTF-8 -charset UTF-8 -docencoding UTF-8 -author -version -Xdoclint:none -windowtitle "Multi-Agent Simulation" -doctitle "Documentation du projet Multi-Agents" -header "Simulations Multi-Agents" -bottom "Projet POO - Automates Cellulaires et Boids"
 	@echo "Javadoc générée avec succès dans doc/javadoc/index.html"
+	@echo "open in firefox doc/javadoc/index.html"
+	xdg-open doc/javadoc/index.html
 
 .PHONY: javadoc clean
