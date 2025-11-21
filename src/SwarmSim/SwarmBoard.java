@@ -4,7 +4,7 @@ import gui.GUISimulator;
 import gui.Simulable;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -37,7 +37,7 @@ public class SwarmBoard implements Simulable {
 
     private List<Boids> initListBoidRandom (int nbBoids) {
         Random rng = new Random();
-        List<Boids> lb = new ArrayList<>();
+        List<Boids> lb = new LinkedList<>();
         for (int i = 0; i < nbBoids; i++) {
             int x, y ;
             double velocity,direction ;

@@ -1,7 +1,7 @@
 package SwarmSim;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -17,7 +17,7 @@ class PredatorSwarm extends Swarm {
     @Override
     protected List<Boids> initListBoidRandom(int n, int width, int height) {
         Random rng = new Random();
-        List<Boids> lb = new ArrayList<>();
+        List<Boids> lb = new LinkedList<>();
         for (int i = 0; i < n; i++) {
             int x = rng.nextInt(0, Math.max(1, width));
             int y = rng.nextInt(0, Math.max(1, height));
