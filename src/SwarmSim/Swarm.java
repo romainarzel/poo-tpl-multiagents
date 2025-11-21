@@ -1,7 +1,7 @@
 package SwarmSim;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -18,7 +18,7 @@ class Swarm {
             throw new IllegalArgumentException("number of Boids need to be superior to 1");
         }
         this.nbBoids = nbBoids;
-        this.boids = new ArrayList<>();
+        this.boids = new LinkedList<>();
     }
 
     public int getNbBoids() {
@@ -47,7 +47,7 @@ class Swarm {
 
     protected List<Boids> initListBoidRandom(int n, int width, int height) {
         Random rng = new Random();
-        List<Boids> lb = new ArrayList<>();
+        List<Boids> lb = new LinkedList<>();
         for (int i = 0; i < n; i++) {
             int x = rng.nextInt(0, Math.max(1, width));
             int y = rng.nextInt(0, Math.max(1, height));
