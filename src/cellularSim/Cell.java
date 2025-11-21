@@ -19,7 +19,7 @@ public class Cell {
      * @param state l'état initial de la cellule
      */
     public Cell(int state){
-        setMaxState(maxState);
+        setMaxState(1);
         setState(state);
         segSeuil = 0;
     }
