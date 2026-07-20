@@ -86,7 +86,7 @@ public class Cell {
     /**
      * Règles du jeu de la vie (Conway):
      *      <p>1) Cellule morte avec 3 voisins => naissance</p>
-     *      <p>2) Cellule vivante avec < 2 voisins => mort (isolation)</p>
+     *      <p>2) Cellule vivante avec &lt; 2 voisins => mort (isolation)</p>
      *      <p>3) Cellule vivante avec > 3 voisins => mort (surpopulation)</p>
      * @param nbAliveNeighbours le nombre de voisins vivants
      */
