@@ -1,8 +1,6 @@
 package SwarmSim;
 
 import java.awt.*;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -32,6 +30,10 @@ class PredatorSwarm extends Swarm {
         super(nbBoids);
     }
 
+    protected PredatorSwarm(int nbBoids, Random random) {
+        super(nbBoids, random);
+    }
+
     /**
      * Initialise une liste de prédateurs boids avec positions et vitesses
      * aléatoires.
@@ -47,18 +49,12 @@ class PredatorSwarm extends Swarm {
      * @return liste de nouveaux prédateurs boids
      */
     @Override
-    protected List<Boids> initListBoidRandom(int n, int width, int height) {
-        Random rng = new Random();
-        List<Boids> lb = new LinkedList<>();
-        for (int i = 0; i < n; i++) {
-            int x = rng.nextInt(0, Math.max(1, width));
-            int y = rng.nextInt(0, Math.max(1, height));
+    protected double getMinimumInitialVelocity() {
+        return 0.6;
+    }
 
-            double direction = rng.nextDouble(Math.PI);
-            double velocity = rng.nextDouble(0.6, 3);
-
-            lb.add(new PredatorBoid(x, y, velocity, direction, Color.ORANGE, width, height));
-        }
-        return lb;
+    @Override
+    protected Boids createBoid(int x, int y, double velocity, double direction, int width, int height) {
+        return new PredatorBoid(x, y, velocity, direction, Color.ORANGE, width, height);
     }
 }

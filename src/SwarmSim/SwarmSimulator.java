@@ -31,18 +31,8 @@ public class SwarmSimulator implements Simulable {
     private void initGroups(int nbBoids, int width, int height) {
         sardineSwarm = new Swarm(nbBoids) {
             @Override
-            protected java.util.List<Boids> initListBoidRandom(int n, int w, int h) {
-                // Same as base but with a different color to distinguish
-                java.util.Random rng = new java.util.Random();
-                java.util.List<Boids> lb = new java.util.ArrayList<>();
-                for (int i = 0; i < n; i++) {
-                    int x = rng.nextInt(0, Math.max(1, w));
-                    int y = rng.nextInt(0, Math.max(1, h));
-                    double direction = rng.nextDouble(Math.PI);
-                    double velocity = rng.nextDouble(0.1, 3);
-                    lb.add(new Boids(x, y, velocity, direction, Color.CYAN, w, h));
-                }
-                return lb;
+            protected Boids createBoid(int x, int y, double velocity, double direction, int width, int height) {
+                return new Boids(x, y, velocity, direction, Color.CYAN, width, height);
             }
         };
         sardineSwarm.reInit(width, height);

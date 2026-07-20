@@ -88,26 +88,9 @@ class SegBoard extends Board implements Simulable {
      * Dessine la grille sur l'interface graphique
      */
     public void draw() {
-        gui.reset();
-
-        Color cellColor;
-        for (int col = 0; col < getWidth(); col++) {
-
-            for (int lig = 0; lig < getHeight(); lig++) {
-                if (getPercent(lig, col) == 0) {
-                    cellColor = deadCellColor;
-                } else {
-                    cellColor = linearColorGradient(minStateCellColor, maxStateCellColor,
-                            (float) getPercent(lig, col) / 100);
-                }
-
-                gui.addGraphicalElement(new gui.Rectangle(
-                        20 + cellSize * col,
-                        20 + cellSize * lig,
-                        bgColor, cellColor, cellSize));
-
-            }
-        }
+        BoardRenderer.draw(gui, this, cellSize, bgColor, percent -> percent == 0
+                ? deadCellColor
+                : linearColorGradient(minStateCellColor, maxStateCellColor, (float) percent / 100));
     }
 
     /**

@@ -80,21 +80,8 @@ class ImmigrationBoard extends Board implements Simulable {
      * Dessine la grille sur l'interface graphique
      */
     public void draw() {
-        gui.reset();
-
-        Color cellColor;
-        for (int col = 0; col < getWidth(); col++) {
-
-            for (int lig = 0; lig < getHeight(); lig++) {
-                cellColor = linearColorGradient(deadCellColor, maxStateCellColor, (float) getPercent(lig, col) / 100);
-
-                gui.addGraphicalElement(new gui.Rectangle(
-                        20 + cellSize * col,
-                        20 + cellSize * lig,
-                        bgColor, cellColor, cellSize));
-
-            }
-        }
+        BoardRenderer.draw(gui, this, cellSize, bgColor,
+                percent -> linearColorGradient(deadCellColor, maxStateCellColor, (float) percent / 100));
     }
 
     /**

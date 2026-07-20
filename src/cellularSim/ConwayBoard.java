@@ -78,21 +78,8 @@ class ConwayBoard extends Board implements Simulable {
      * Dessine la grille sur l'interface graphique
      */
     public void draw() {
-        gui.reset();
-
-        Color cellColor;
-        for (int x = 0; x < getWidth(); x++) {
-
-            for (int y = 0; y < getHeight(); y++) {
-                cellColor = linearColorGradient(deadCellColor, maxStateCellColor, (float) getPercent(y, x) / 100);
-
-                gui.addGraphicalElement(new gui.Rectangle(
-                        20 + cellSize * x,
-                        20 + cellSize * y,
-                        bgColor, cellColor, cellSize));
-
-            }
-        }
+        BoardRenderer.draw(gui, this, cellSize, bgColor,
+                percent -> linearColorGradient(deadCellColor, maxStateCellColor, (float) percent / 100));
     }
 
     /**

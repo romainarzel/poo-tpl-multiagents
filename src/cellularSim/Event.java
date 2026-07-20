@@ -1,5 +1,7 @@
 package cellularSim;
 
+import simulation.ScheduledEvent;
+
 /**
  * Événement abstrait planifié à une date spécifique de simulation.
  * 
@@ -21,8 +23,7 @@ package cellularSim;
  * @see EventManager
  * @see Comparable
  */
-abstract class Event implements Comparable<Event> {
-    private final long date;
+abstract class Event extends ScheduledEvent {
 
     /**
      * Crée un nouvel événement programmé à la date spécifiée.
@@ -30,16 +31,7 @@ abstract class Event implements Comparable<Event> {
      * @param date la date de simulation à laquelle l'événement doit être exécuté
      */
     public Event(long date) {
-        this.date = date;
-    }
-
-    /**
-     * Retourne la date de simulation de cet événement.
-     * 
-     * @return la date d'exécution planifiée
-     */
-    public long getDate() {
-        return date;
+        super(date);
     }
 
     /**
@@ -54,20 +46,4 @@ abstract class Event implements Comparable<Event> {
      */
     public abstract void execute();
 
-    /**
-     * Compare cet événement à un autre événement selon leur date d'exécution.
-     * 
-     * <p>
-     * Cette méthode permet d'ordonner les événements par ordre chronologique dans
-     * une structure de données comme une {@link java.util.PriorityQueue}.
-     * </p>
-     * 
-     * @param other l'événement à comparer
-     * @return un entier négatif, zéro, ou positif si cet événement est antérieur,
-     *         simultané, ou postérieur à l'événement spécifié
-     */
-    @Override
-    public int compareTo(Event other) {
-        return Long.compare(this.date, other.date);
-    }
 }

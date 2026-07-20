@@ -11,13 +11,16 @@ BALLS_SRC = $(SRC_DIR)/TestBalls.java
 GRAVITYBALL_SRC = $(SRC_DIR)/TestGravityBall.java 
 CELLULARSIM_SRC = $(SRC_DIR)/cellularSim/*.java
 SWARMSIM_SRC = $(SRC_DIR)/SwarmSim/*.java
+ALL_SRC = $(wildcard $(SRC_DIR)/*.java) \
+	$(wildcard $(SRC_DIR)/cellularSim/*.java) \
+	$(wildcard $(SRC_DIR)/SwarmSim/*.java)
 # ============= RULES ===================
 
 all: build
 
 # Compile ALL sources in src/ (preserves package structure)
 build:
-	javac -d $(BIN_DIR) -classpath $(LIBS) -sourcepath $(SRC_DIR) $(SRC_DIR)/**/*.java
+	javac -d $(BIN_DIR) -classpath $(LIBS) -sourcepath $(SRC_DIR) $(ALL_SRC)
 
 # ================== COMPILER ===================
 SPECIFIC_COMPILE_CMD = javac -d $(BIN_DIR) -classpath $(LIBS) 

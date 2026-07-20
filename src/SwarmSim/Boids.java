@@ -114,7 +114,6 @@ public class Boids extends Element implements GraphicalElement {
         this.windowWidth = wallX;
         this.windowHeight = wallY;
 
-        System.out.println("Screen for boid x: " + wallX + " y: " + wallY);
         this.x = clamp(x, 0, wallX);
         this.y = clamp(y, 0, wallY);
         this.velocity = clamp(velocity, MIN_VELOCITY, MAX_VELOCITY);

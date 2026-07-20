@@ -9,9 +9,7 @@ public class Cell {
      * Constructuer pour une situation vierge
      */
     public Cell(){
-        setMaxState(1);
-        setState(0);
-        segSeuil = 0;
+        this(0, 1, 0);
     }
 
     /**
@@ -19,9 +17,7 @@ public class Cell {
      * @param state l'état initial de la cellule
      */
     public Cell(int state){
-        setMaxState(1);
-        setState(state);
-        segSeuil = 0;
+        this(state, 1, 0);
     }
 
     /**
@@ -30,9 +26,7 @@ public class Cell {
      * @param maxState l'état maximal de la cellule --FINAL--
      */
     public Cell(int state, int maxState){
-        setMaxState(maxState);
-        setState(state);
-        segSeuil = 0;
+        this(state, maxState, 0);
     }
 
     /**

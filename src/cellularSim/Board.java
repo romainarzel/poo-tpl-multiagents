@@ -43,6 +43,13 @@ public class Board {
     private ArrayList<ArrayList<Cell>> cellBoard;
     private int width;
     private int height;
+    private long generation;
+    private final Random random = new Random();
+
+    @FunctionalInterface
+    private interface CellPredicate {
+        boolean matches(Cell cell);
+    }
 
     /**
      * Constructeur utiliser pour la variante de l'immigration
@@ -107,7 +114,7 @@ public class Board {
      * @return la couleur de la cellule
      */
     protected static Color linearColorGradient(Color c1, Color c2, float percent){
-        if (percent > 100 | percent < 0){
+        if (percent > 100 || percent < 0){
             throw new IllegalArgumentException("percentage is out of range");
         }
 
@@ -139,12 +146,33 @@ public class Board {
         return height;
     }
 
+    public long getGeneration() {
+        return generation;
+    }
+
+    public SimulationMetrics getMetrics() {
+        int aliveCells = 0;
+        for (int lig = 0; lig < height; lig++) {
+            for (int col = 0; col < width; col++) {
+                if (getCell(lig, col).isAlive()) {
+                    aliveCells++;
+                }
+            }
+        }
+        return new SimulationMetrics(generation, aliveCells, width * height);
+    }
+
+    public void setRandomSeed(long seed) {
+        random.setSeed(seed);
+    }
+
     /**
      * Initialise la grille pour la variante de l'immigration
      * @param aliveCells map des états des cellules vivantes : clés = coords, valeurs = états
      * @param maxState l'état maximal des cellule
      */
     public void setCellBoard(HashMap<Point2D.Double, Integer> aliveCells, int maxState){
+        generation = 0;
         cellBoard = new ArrayList<>();
         Point2D coords = new Point2D.Double();
 
@@ -166,6 +194,7 @@ public class Board {
      * @param segSeuil le seuil de ségrégation
      */
     public void setCellBoard(HashMap<Point2D.Double, Integer> aliveCells, int maxState, int segSeuil){
+        generation = 0;
         cellBoard = new ArrayList<>();
         Point2D coords = new Point2D.Double();
 
@@ -185,6 +214,7 @@ public class Board {
      * @param aliveCells ensemble des cellules vivantes
      */
     public void setCellBoard(HashSet<Point2D.Double> aliveCells){
+        generation = 0;
         cellBoard = new ArrayList<>();
         Point2D coords = new Point2D.Double();
 
@@ -210,25 +240,7 @@ public class Board {
      * @return le nombre de voisins vivants
      */
     private int getNbAliveNeighbours(int lig, int col){
-        int count = 0;
-        boolean isCellAlive;
-
-        Point2D.Double adjCell = new Point2D.Double();
-
-        for (int addLig = -1; addLig <= 1; addLig++){
-            for (int addCol = -1; addCol <= 1; addCol++){
-                adjCell.setLocation(col + addCol, lig + addLig);
-                inBounds(adjCell); // If the coords are out of bounds wrap them around the other side
-
-                isCellAlive = cellBoard.get((int)adjCell.getY()).get((int)adjCell.getX()).isAlive();
-
-                if ((addLig != 0 || addCol != 0) && isCellAlive){ // Warning : need to check if not counting itself
-                    count++;
-                }
-            }
-        }
-
-        return count;
+        return countNeighbours(lig, col, Cell::isAlive);
     }
 
     /**
@@ -238,26 +250,8 @@ public class Board {
      * @return le nombre de voisins dans l'état suivant
      */
     private int getNbNeighboursNextState(int lig, int col){
-        int count = 0;
-        int nextState = cellBoard.get(lig).get(col).nextState();
-        int cellState;
-
-        Point2D.Double adjCell = new Point2D.Double();
-
-        for (int addLig = -1; addLig <= 1; addLig++){
-            for (int addCol = -1; addCol <= 1; addCol++){
-                adjCell.setLocation(col + addCol, lig + addLig);
-                inBounds(adjCell); // If the coords are out of bounds wrap them around the other side
-
-                cellState = cellBoard.get((int)adjCell.getY()).get((int)adjCell.getX()).getPercent();
-
-                if ((addLig != 0 || addCol != 0) && cellState == nextState){ // need to check to not count itself
-                    count++;
-                }
-            }
-        }
-
-        return count;
+        int nextState = getCell(lig, col).nextState();
+        return countNeighbours(lig, col, cell -> cell.getPercent() == nextState);
     }
 
     /**
@@ -267,25 +261,25 @@ public class Board {
      * @return le nombre de voisins différents
      */
     private int getNbNeighboursDiff(int lig, int col){
+        int state = getCell(lig, col).getPercent();
+        return countNeighbours(lig, col, cell -> cell.getPercent() != 0 && cell.getPercent() != state);
+    }
+
+    private int countNeighbours(int lig, int col, CellPredicate predicate) {
         int count = 0;
-        int state = cellBoard.get(lig).get(col).getPercent();
-        int cellState;
+        for (int addLig = -1; addLig <= 1; addLig++) {
+            for (int addCol = -1; addCol <= 1; addCol++) {
+                if (addLig == 0 && addCol == 0) {
+                    continue;
+                }
 
-        Point2D.Double adjCell = new Point2D.Double();
-
-        for (int addLig = -1; addLig <= 1; addLig++){
-            for (int addCol = -1; addCol <= 1; addCol++){
-                adjCell.setLocation(col + addCol, lig + addLig);
-                inBounds(adjCell); // If the coords are out of bounds wrap them around the other side
-
-                cellState = cellBoard.get((int)adjCell.getY()).get((int)adjCell.getX()).getPercent();
-
-                if ((addLig != 0 || addCol != 0) && cellState != 0 && cellState != state){ // need to check to not count itself
+                int neighbourLig = wrap(lig + addLig, height);
+                int neighbourCol = wrap(col + addCol, width);
+                if (predicate.matches(getCell(neighbourLig, neighbourCol))) {
                     count++;
                 }
             }
         }
-
         return count;
     }
 
@@ -302,10 +296,10 @@ public class Board {
 
         for (int addLig = -1; addLig <= 1; addLig++){
             for (int addCol = -1; addCol <= 1; addCol++){
-                Point2D.Double adjCell = new Point2D.Double(col + addCol, lig + addLig);
-                inBounds(adjCell); // If the coords are out of bounds wrap them around the other side
-
-                isDead = !cellBoard.get((int)adjCell.getY()).get((int)adjCell.getX()).isAlive();
+                int neighbourLig = wrap(lig + addLig, height);
+                int neighbourCol = wrap(col + addCol, width);
+                Point2D.Double adjCell = new Point2D.Double(neighbourCol, neighbourLig);
+                isDead = !getCell(neighbourLig, neighbourCol).isAlive();
 
                 if ((addLig != 0 || addCol != 0) && isDead){ // need to check to not count itself
                     deadNeighbours.add(adjCell);
@@ -316,37 +310,28 @@ public class Board {
         return deadNeighbours;
     }
 
-    /**
-     * Assure que les coordonnées du point soit comprises dans la grille, si ce n'est pas le cas,
-     * modifie les coordonées en considérant la continuité des bords
-     * (cela revient à considérer la grille comme un donut)
-     *
-     * <p>Mmmmmmh... donut!</p>
-     * @param p le point de coordonnées à vérifier
-     */
-    private void inBounds(Point2D.Double p){
-        double x = p.getX();
-        double y = p.getY();
+    private Cell getCell(int lig, int col) {
+        return cellBoard.get(lig).get(col);
+    }
 
-        if (x < 0){
-            x = width - 1;
-        } else if (x >= width){
-            x = 0;
+    private int wrap(int coordinate, int size) {
+        if (coordinate < 0) {
+            return size - 1;
         }
-
-        if (y < 0){
-            y = height - 1;
-        } else if (y >= height){
-            y = 0;
+        if (coordinate >= size) {
+            return 0;
         }
-
-        p.setLocation(x, y);
+        return coordinate;
     }
 
     /**
      * Modifie la grille selon les règles du jeu de la vie de Conway
      */
     public void nextGenConway(){
+        CellularRules.CONWAY.apply(this);
+    }
+
+    void advanceConway(){
         ArrayList<ArrayList<Integer>> listNeighbours = new ArrayList<>();
         for (int lig = 0; lig < height; lig++){ // Calculate the number of neighbours for each cell
             listNeighbours.add(new ArrayList<>());
@@ -360,12 +345,17 @@ public class Board {
                 cellBoard.get(lig).get(col).newGenConway(listNeighbours.get(lig).get(col));
             }
         }
+        generation++;
     }
 
     /**
      * Modifie la grille selon les règles de la variante de l'immigration
      */
     public void nextGenImmigration(){
+        CellularRules.IMMIGRATION.apply(this);
+    }
+
+    void advanceImmigration(){
         ArrayList<ArrayList<Integer>> listNeighbours = new ArrayList<>();
         for (int lig = 0; lig < height; lig++){ // Calculate the number of neighbours for each cell
             listNeighbours.add(new ArrayList<>());
@@ -379,18 +369,21 @@ public class Board {
                 cellBoard.get(lig).get(col).newGenImmigration(listNeighbours.get(lig).get(col));
             }
         }
+        generation++;
     }
 
     /**
      * Modifie les règles selon la variante de la ségrégation
      */
     public void nextGenSeg(){
+        CellularRules.SEGREGATION.apply(this);
+    }
+
+    void advanceSegregation(){
         int nbNeighboursDiff;
         int state;
         Point2D newCoords;
         ArrayList<Point2D.Double> deadNeighbours;
-
-        Random rng = new Random();
 
         for (int lig = 0; lig < height; lig++){
             for (int col = 0; col < width; col++){
@@ -400,7 +393,7 @@ public class Board {
 
                     deadNeighbours = listDeadNeighbours(lig, col);
                     if (!deadNeighbours.isEmpty()){
-                        newCoords = deadNeighbours.get(rng.nextInt(deadNeighbours.size()));
+                        newCoords = deadNeighbours.get(random.nextInt(deadNeighbours.size()));
 
                         state = cellBoard.get(lig).get(col).segKill();
                         cellBoard.get((int)newCoords.getY()).get((int)newCoords.getX()).segMove(state);
@@ -408,5 +401,6 @@ public class Board {
                 }
             }
         }
+        generation++;
     }
 }

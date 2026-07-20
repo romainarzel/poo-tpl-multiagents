@@ -1,6 +1,7 @@
 #minimal gitignore
 
 bin/ 
+graphify-out/
 
 #some file created by Intellij IDEA
 .idea/
