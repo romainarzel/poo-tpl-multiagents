@@ -75,4 +75,8 @@ javadoc:
 	@echo "open in browser doc/javadoc/index.html"
 	xdg-open doc/javadoc/index.html
 
-.PHONY: javadoc clean
+javadoc-headless:
+	@echo "Generating Javadoc without opening a browser..."
+	javadoc -d doc/javadoc -sourcepath src -subpackages cellularSim:SwarmSim -classpath lib/gui.jar -encoding UTF-8 -charset UTF-8 -docencoding UTF-8 -author -version -Xdoclint:none -windowtitle "Multi-Agent Simulation" -doctitle "Multi-Agent Simulations" -header "Multi-Agent Simulations" -bottom "Educational coursework project"
+
+.PHONY: javadoc javadoc-headless clean
