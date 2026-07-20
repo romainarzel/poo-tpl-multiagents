@@ -1,68 +1,68 @@
 # Multi-Agent and Cellular-Automata Simulations
 
-A Java coursework project implementing graphical simulations of cellular automata, boids and predator–prey swarm behavior, with a shared discrete-event engine and lightweight GUI-free regression checks.
+## Overview
+
+An educational Java project containing graphical simulations of cellular automata, balls, boids and predator–prey swarms. It also includes a shared discrete-event scheduler and a GUI-free cellular regression check.
 
 ## Academic context
 
-The repository contains collaborative student work developed in a programming course. It also retains distributed teaching material, the GUI simulator library in `lib/gui.jar`, its documentation and third-party legal notices. Those components are not claimed as original work.
+This is collaborative coursework. It retains supplied teaching examples, `lib/gui.jar`, bundled documentation and third-party notices. These components are not presented as original portfolio work.
 
 ## Included simulations
 
-- Conway's Game of Life
-- Immigration cellular automata
+- Conway's Game of Life and Immigration cellular automata
 - Schelling-style segregation
 - Single- and multi-ball gravity animations
 - Boids and predator–prey swarms
-- A discrete-event scheduler used by the simulation engine
 
-The cellular engine models toroidal neighborhoods and exposes simple state metrics. The swarm code combines flocking rules, predator targeting and scheduled updates. GUI entry points require the supplied `lib/gui.jar` library.
+## Architecture
 
-## Requirements and build
+The cellular engine uses toroidal neighborhoods and exposes state metrics. The swarm simulation combines flocking and predator-targeting behaviour with discrete-event scheduling. GUI entry points depend on `lib/gui.jar`.
 
-Use a JDK that supports the source level used by the repository, GNU Make and the tracked GUI library:
+## Requirements
+
+JDK 21, GNU Make and the tracked `lib/gui.jar` library.
+
+## Build
 
 ```bash
 make build
 ```
 
-This compiles all Java sources into `bin/` while preserving package directories. The GUI library is loaded from `lib/gui.jar`.
+Compiled classes are written to `bin/`.
 
 ## Run
 
-The Makefile provides these graphical targets:
+Graphical desktop targets include `make runGameOfLife`, `make runGameOfImmigration`, `make runSegregationSim`, `make runSwarm`, `make runTestBalls`, `make runTestGravityBall` and `make runInvader`. They are not run in headless CI.
+
+## GUI-free validation
+
+After `make build`:
 
 ```bash
-make runGameOfLife
-make runGameOfImmigration
-make runSegregationSim
-make runSwarm
-make runTestBalls
-make runTestGravityBall
-make runInvader
-```
+# Windows
+java -ea -cp "bin;lib/gui.jar" cellularSim.CellularEngineTest
 
-They open GUI windows and are intended for an interactive desktop. They are not launched in headless CI.
-
-## Tests and documentation
-
-After `make build`, run the GUI-free cellular regression check with:
-
-```bash
+# Unix-like systems
 java -ea -cp "bin:lib/gui.jar" cellularSim.CellularEngineTest
 ```
 
-Generate Javadoc without opening a browser with:
+## Documentation
 
 ```bash
 make javadoc-headless
 ```
 
-The existing `make javadoc` target additionally attempts to open the generated index through `xdg-open`.
+The existing `make javadoc` target also opens the generated index through `xdg-open`.
 
-## My contribution
+## Contribution and attribution
 
-Git history attributes the latest simulation-engine refactor and metrics regression checks to Romain Arzel. The rest of the repository is collaborative; this section does not claim authorship of every simulation, GUI component or document.
+History attributes the recent engine refactor, shared scheduler, state metrics and GUI-free cellular regression check to Romain Arzel (`bb2d449`). Earlier swarm work is also associated with a Romain-authored commit (`ab272a8`), while the repository as a whole is multi-author. Supplied teaching examples, `lib/gui.jar`, generated documentation and third-party assets are not claimed as original work.
 
-## Limitations and academic integrity
+## Limitations
 
-This is an educational project, not a production simulation framework. Results depend on Java, GUI-library and desktop-environment versions; no performance, correctness or security guarantee is implied. Preserve the course attribution and the included third-party notices. No repository-wide license is added because ownership and redistribution rights for the course material and GUI library are not established.
+This is not a production simulation framework or a cybersecurity project. GUI behaviour depends on the supplied library and desktop environment; headless validation covers compilation, one regression check and Javadoc generation only.
+
+## License status
+
+No repository-wide license is added because redistribution rights for the supplied GUI library, teaching material and all collaborative work are not established.
